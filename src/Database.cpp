@@ -9,7 +9,7 @@
 
 using namespace std;
 
-void Database::import(string filename)
+void Database::open(string filename)
 {
   int size = 0;
   s_patient p_record;
