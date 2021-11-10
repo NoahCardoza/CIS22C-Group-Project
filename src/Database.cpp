@@ -26,23 +26,48 @@ bool Database::open(string filename)
     return false;
   }
 
-  Patient *patient = new Patient();
+  Patient *record = new Patient();
 
   in.ignore(127, '\n'); // read past the CSV header
 
   while (in.good())
   {
-    if (patient->fromStream(&in))
+    if (record->fromStream(&in))
     {
-      records.push_back(patient);
-      patient = new Patient();
+      records.push_back(record);
+      record = new Patient();
     }
   }
 
   // delete the left over empty Patient
-  delete patient;
+  delete record;
 
   opened = true;
+
+  return true;
+}
+
+bool Database::save(string filename)
+{
+  if (!opened)
+  {
+    // we can't save a database that hasn't been opened
+    return false;
+  }
+
+  ofstream out(filename);
+
+  // TODO: figure out how to make this more modular
+  out << "id,name,checkin date,checkout date,status,age,country code,gender" << endl;
+
+  // TODO: iterate the HashTable to write
+  // in the same order
+  for (auto const &record : records)
+  {
+    record->toStream(&out);
+  }
+
+  out.close();
 
   return true;
 }

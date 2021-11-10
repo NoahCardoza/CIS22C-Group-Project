@@ -57,6 +57,11 @@ public:
     return true;
   }
 
+  void toStream(std::ostream *out)
+  {
+    *out << id << ',' << name << ',' << checkin << ',' << checkout << ',' << status << ',' << age << ',' << country << ',' << gender << std::endl;
+  }
+
   void print(void)
   {
     // TODO: remove this function, only for debugging
