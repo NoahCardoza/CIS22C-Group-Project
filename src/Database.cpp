@@ -10,6 +10,14 @@
 
 using namespace std;
 
+/**
+ * Accept a string representing the path
+ * to a CSV file that contains the
+ * information needed to populate
+ * the database.
+ * 
+ * Returns success code.
+ */
 bool Database::open(string filename)
 {
   if (opened)
@@ -47,6 +55,13 @@ bool Database::open(string filename)
   return true;
 }
 
+/**
+ * Accept a string representing the path
+ * for which the database in memory will
+ * be saved to the filesystem.
+ * 
+ * Returns success code.
+ */
 bool Database::save(string filename)
 {
   if (!opened)
@@ -72,6 +87,11 @@ bool Database::save(string filename)
   return true;
 }
 
+/**
+ * Empties the vector holding the
+ * pointers to the records in the
+ * database and frees them
+ */
 Database::~Database(void)
 {
   Patient *patient;

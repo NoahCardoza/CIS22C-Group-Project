@@ -34,45 +34,9 @@ public:
     gender = 0;
   }
 
-  bool fromStream(std::ifstream *in)
-  {
-    if (!getline(*in, id, ','))
-    {
-      return false;
-    };
-
-    getline(*in, name, ',');
-    *in >> checkin;
-    in->ignore(1); // consume comma
-    *in >> checkout;
-    in->ignore(1); // consume comma
-    in->get(status);
-    in->ignore(1); // consume comma
-    *in >> age;
-    in->ignore(1); // consume comma
-    getline(*in, country, ',');
-    in->get(gender);
-    in->ignore(1); // consume newline
-
-    return true;
-  }
-
-  void toStream(std::ostream *out)
-  {
-    *out << id << ',' << name << ',' << checkin << ',' << checkout << ',' << status << ',' << age << ',' << country << ',' << gender << std::endl;
-  }
-
-  void print(void)
-  {
-    // TODO: remove this function, only for debugging
-    std::cout << "ID: " << id << std::endl;
-    std::cout << "Name: " << name << std::endl;
-    std::cout << "Check In: " << checkin << std::endl;
-    std::cout << "Check Out: " << checkout << std::endl;
-    std::cout << "Age: " << age << std::endl;
-    std::cout << "Country: " << country << std::endl;
-    std::cout << "Gender: " << gender << std::endl;
-  }
+  bool fromStream(std::ifstream *in);
+  void toStream(std::ostream *out);
+  void print(void);
 
   // getters
   void setId(string id) { this->id = id; }
@@ -93,6 +57,11 @@ public:
   int getAge() { return age; }
   string getCountry() { return country; }
   char getGender() { return gender; }
+
+  // overloaded operators
+  bool operator==(const Patient &p);
+  bool operator<(const Patient &p);
+  bool operator>(const Patient &p);
 };
 
 #endif
