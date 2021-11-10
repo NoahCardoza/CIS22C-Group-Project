@@ -49,4 +49,12 @@ bool Database::open(string filename)
 
 Database::~Database(void)
 {
+  Patient *patient;
+
+  while (!records.empty())
+  {
+    patient = records.back();
+    records.pop_back();
+    delete patient;
+  }
 }
