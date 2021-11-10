@@ -3,17 +3,17 @@
 #include <fstream>
 #include <sstream>
 
+#include "Database.h"
 #include "Patient.h"
 
 using namespace std;
 
-/**
- * Accepts a stream and fills the interal
- * properties. Basically initiates it's self
- * via a steam.
- * 
- * Returns success status
- */
+int Patient::hash(int size)
+{
+  // TODO: implement this function
+  return size;
+}
+
 bool Patient::fromStream(ifstream *in)
 {
   // if nothing is read in for the id
@@ -39,10 +39,6 @@ bool Patient::fromStream(ifstream *in)
   return true;
 }
 
-/**
- * Accept a stream and write it's CSV
- * representation to the stream.
- */
 void Patient::toStream(ostream *out)
 {
   *out << id << ',' << name << ',' << checkin << ',' << checkout << ',' << status << ',' << age << ',' << country << ',' << gender << endl;
