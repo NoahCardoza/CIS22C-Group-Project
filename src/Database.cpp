@@ -4,30 +4,18 @@
 #include <sstream>
 #include <vector>
 
+#include "Patient.h"
 #include "Database.h"
 
 using namespace std;
 
-struct s_record
-{
-  string id;
-  string name;
-  int checkin;
-  int checkout;
-  char status;
-  int age;
-  char country[3] = "\0\0";
-  char gender;
-};
-
 void Database::import(string filename)
 {
   int size = 0;
-  s_record record;
+  s_patient p_record;
   string line;
-  vector<s_record> lines;
+  vector<Patient *> records;
   ifstream in(filename);
-  char char_buf;
 
   if (!in)
   {
@@ -39,34 +27,35 @@ void Database::import(string filename)
 
   while (in.good())
   {
-    if (!getline(in, record.id, ','))
+    if (!getline(in, p_record.id, ','))
     {
       continue;
     };
-    getline(in, record.name, ',');
-    in >> record.checkin;
-    in.get(char_buf); // consume comma
-    in >> record.checkout;
-    in.get(char_buf); // consume comma
-    in.get(record.status);
-    in.get(char_buf); // consume comma
-    in >> record.age;
-    in.get(char_buf); // consume comma
-    in.read(record.country, 2);
-    in.get(char_buf); // consume comma
-    in.get(record.gender);
-    in.get(char_buf); // consume newline
+    getline(in, p_record.name, ',');
+    in >> p_record.checkin;
+    in.ignore(1); // consume comma
+    in >> p_record.checkout;
+    in.ignore(1); // consume comma
+    in.get(p_record.status);
+    in.ignore(1); // consume comma
+    in >> p_record.age;
+    in.ignore(1); // consume comma
+    getline(in, p_record.country, ',');
+    in.get(p_record.gender);
+    in.ignore(1); // consume newline
 
-    cout << "ID: " << record.id << endl;
-    cout << "Name: " << record.name << endl;
-    cout << "Check In: " << record.checkin << endl;
-    cout << "Check Out: " << record.checkout << endl;
-    cout << "Age: " << record.age << endl;
-    cout << "Country: " << record.country << endl;
-    cout << "Gender: " << record.gender << endl;
+    Patient *patient = new Patient(&p_record);
 
-    lines.push_back(record);
+    records.push_back(patient);
     size++;
+  }
+
+  while (!records.empty())
+  {
+    Patient *patient = records.back();
+    patient->print();
+    records.pop_back();
+    delete patient;
   }
 
   cout << size << endl;
