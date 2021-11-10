@@ -64,3 +64,22 @@ void Patient::print(void)
   cout << "Country: " << country << endl;
   cout << "Gender: " << gender << endl;
 }
+
+/**
+ * Overloaded Operators
+ */
+
+bool Patient::operator==(const Patient &p)
+{
+  return name == p.name;
+}
+
+bool Patient::operator<(const Patient &p)
+{
+  return name < p.name;
+}
+
+bool Patient::operator>(const Patient &p)
+{
+  return name > p.name;
+}
