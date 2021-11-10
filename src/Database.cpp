@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 #include <vector>
 
 #include "Patient.h"
@@ -9,56 +10,43 @@
 
 using namespace std;
 
-void Database::open(string filename)
+bool Database::open(string filename)
 {
-  int size = 0;
-  s_patient p_record;
-  string line;
-  vector<Patient *> records;
+  if (opened)
+  {
+    // you can't open a new database file
+    // while one is already opened
+    return false;
+  }
+
   ifstream in(filename);
 
   if (!in)
   {
-    // TODO: handle errors better
-    exit(1);
+    return false;
   }
 
-  getline(in, line); // read past the CSV header
+  Patient *patient = new Patient();
+
+  in.ignore(127, '\n'); // read past the CSV header
 
   while (in.good())
   {
-    if (!getline(in, p_record.id, ','))
+    if (patient->fromStream(&in))
     {
-      continue;
-    };
-    getline(in, p_record.name, ',');
-    in >> p_record.checkin;
-    in.ignore(1); // consume comma
-    in >> p_record.checkout;
-    in.ignore(1); // consume comma
-    in.get(p_record.status);
-    in.ignore(1); // consume comma
-    in >> p_record.age;
-    in.ignore(1); // consume comma
-    getline(in, p_record.country, ',');
-    in.get(p_record.gender);
-    in.ignore(1); // consume newline
-
-    Patient *patient = new Patient(&p_record);
-
-    records.push_back(patient);
-    size++;
+      records.push_back(patient);
+      patient = new Patient();
+    }
   }
 
-  while (!records.empty())
-  {
-    Patient *patient = records.back();
-    patient->print();
-    records.pop_back();
-    delete patient;
-  }
+  // delete the left over empty Patient
+  delete patient;
 
-  cout << size << endl;
+  opened = true;
+
+  return true;
 }
 
-Database::~Database(void) {}
+Database::~Database(void)
+{
+}

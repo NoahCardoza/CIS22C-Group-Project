@@ -2,6 +2,9 @@
 #define DATABASE_H
 
 #include <string>
+#include <vector>
+
+#include "Patient.h"
 
 using std::string;
 
@@ -9,10 +12,11 @@ class Database
 {
 private:
   bool opened = false;
+  std::vector<Patient *> records;
 
 public:
-  void open(string filename);
-  void save(string filename);
+  bool open(string filename);
+  bool save(string filename);
 
   ~Database();
 };
