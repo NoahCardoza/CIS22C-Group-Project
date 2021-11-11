@@ -9,6 +9,7 @@
 #include "HashTable.h"
 #include "BinarySearchTree.h"
 #include "Patient.h"
+#include "Database.h"
 
 class IOManager
 {
@@ -63,6 +64,8 @@ class IOManager
 		 * BST DB to store the patients.
 		 */
 		BinarySearchTree<Patient> bstDB;
+
+		Database<Patient> database;
 
 		/**
 		 * stack used for the undoDelete() method.
