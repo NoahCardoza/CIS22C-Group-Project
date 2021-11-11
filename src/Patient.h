@@ -50,10 +50,6 @@ public:
   void setAge(int age) { this->age = age; }
   void setCountry(string country) { this->country = country; }
   void setGender(char gender) { this->gender = gender; }
-  static string getHeader()
-  {
-    return "id,name,checkin date,checkout date,status,age,country code,gender";
-  };
 
   // setters
   string getId() { return id; }

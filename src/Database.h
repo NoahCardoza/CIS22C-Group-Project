@@ -21,7 +21,7 @@ class Database
 private:
   bool opened = false;
   vector<T *> records;
-  string header;
+  virtual string getHeader() = 0;
 
 public:
   bool open(string filename);
@@ -109,7 +109,7 @@ bool Database<T>::save(string filename)
 
   ofstream out(filename);
 
-  out << T::getHeader() << endl;
+  out << getHeader() << endl;
 
   // TODO: iterate the HashTable to write
   // in the same order
