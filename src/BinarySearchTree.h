@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 // Binary Search Tree ADT
 
 
@@ -116,8 +115,6 @@ BinaryNode<T>* BinarySearchTree<T>::_search(BinaryNode<T>* nodePtr,
 {
     BinaryNode<T>* found = nullptr;
 
-    /* Write your code here */
-
     if (nodePtr == nullptr) {
         return found;
     }
@@ -134,7 +131,7 @@ BinaryNode<T>* BinarySearchTree<T>::_search(BinaryNode<T>* nodePtr,
             return found;
         }
     }
-    //return found;
+    
 }
 
 #endif
