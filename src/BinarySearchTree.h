@@ -1,12 +1,11 @@
 #pragma once
 #pragma once
 // Binary Search Tree ADT
-// Created by A. Student
-// Modified by:  
+
 
 #ifndef _BINARY_SEARCH_TREE
 #define _BINARY_SEARCH_TREE
-//#include "College.h"
+
 #include "BinaryTree.h"
 
 template<class T>
