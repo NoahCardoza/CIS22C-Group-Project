@@ -1,8 +1,6 @@
 #pragma once
 #pragma once
 // Binary tree abstract base class
-// Created by A. Student
-// Modified by:
 
 #ifndef _BINARY_TREE
 #define _BINARY_TREE
@@ -15,7 +13,7 @@ class BinaryTree
 {
 protected:
 	BinaryNode<T>* rootPtr;		// ptr to root node
-	int count;							// number of nodes in tree
+	int count;	        	// number of nodes in tree
 
 public:
 	// "admin" functions
