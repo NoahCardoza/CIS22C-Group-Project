@@ -1,5 +1,5 @@
 #pragma once
-#pragma once
+
 #ifndef _BINARY_NODE
 #define _BINARY_NODE
 
