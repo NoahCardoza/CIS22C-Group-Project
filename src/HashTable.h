@@ -9,44 +9,44 @@
 #define HashTable_h
 #include "LinkedList.h"
 
-template<class ItemType>
+template <class T>
 class HashTable
 {
 private:
-    LinkedList<ItemType>* hashAry;
+    LinkedList<T> *hashAry;
     int hashSize;
     int count;
-    int hash(const ItemType &key);
-    
-public:
-    HashTable() { count = 0; hashSize = 53; hashAry = new HashNode<ItemType>[hashSize]; }
-    HashTable(int n)    { count = 0; hashSize = n; hashAry = new HashNode<ItemType>[hashSize]; }
-    ~HashTable(){ delete [] hashAry; }
+    int hash(const T &key);
 
-    int getCount() const    { return count; }
+public:
+    HashTable()
+    {
+        count = 0;
+        hashSize = 53;
+        hashAry = new HashNode<T>[hashSize];
+    }
+    HashTable(int n)
+    {
+        count = 0;
+        hashSize = n;
+        hashAry = new HashNode<T>[hashSize];
+    }
+    ~HashTable() { delete[] hashAry; }
+
+    int getCount() const { return count; }
     int getSize() const { return hashSize; }
-    double getLoadFactor() const {return 100.0 * count / hashSize; }
+    double getLoadFactor() const { return 100.0 * count / hashSize; }
     int getLengthOfLongest() const;
     void displayStatistics();
-    
-    bool isEmpty() const    { return count == 0; }
-    bool insert( const ItemType* itemIn);
-    bool remove( ItemType** itemOut, const ItemType* key);
-    bool search( ItemType** itemOut, const ItemType* key);
+
+    bool isEmpty() const { return count == 0; }
+    bool insert(const T *itemIn);
+    bool remove(T **itemOut, const T *key);
+    bool search(T **itemOut, const T *key);
     int newSize();
     void rehash();
     bool isPrime(int);
-    bool getListItem(ItemType& dataOut);
-}
+    bool getListItem(T &dataOut);
+};
 
-/*~*~*~*
-  A hash function: using pseudorandum generation
- *~**/
-template<class ItemType>
-int HashTable<ItemType>::hash(const ItemType* key)
-{
-    string Ikey = key->getID();
-
-    
-}
 #endif /* HashTable_h */

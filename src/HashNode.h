@@ -8,30 +8,43 @@
 #ifndef HashNode_h
 #define HashNode_h
 
-template<class ItemType>
+template <class T>
 class HashNode
 {
 private:
-    ItemType* ptrItem;
+    T *ptrItem;
     HashNode *next;
-    int nCollision;
-    
+    int collisions;
+
 public:
     //constructors
-    HashNode() {next = NULL; nCollisions = 0;}
-    HashNode(ItemType* pItem ) {ptrItem = pItem; next = NULL; nCollision = 0;}
-    HashNode(ItemType* pItem, HashNode* nextPtr, int nCol)
-            {ptrItem = pItem; nextPtr = NULL; nCollision = nCol;}
-    
+    HashNode()
+    {
+        next = NULL;
+        collisions = 0;
+    }
+    HashNode(T *pItem)
+    {
+        ptrItem = pItem;
+        next = NULL;
+        collisions = 0;
+    }
+    HashNode(T *pItem, HashNode *nextPtr, int col)
+    {
+        ptrItem = pItem;
+        nextPtr = NULL;
+        collisions = col;
+    }
+
     //setters
-    void setItem(const ItemType* pItem) {ptrItem = pItem;}
-    void setNext(HashNode* nextPtr) {next = nextPtr;}
-    void setNoCollisions(int nCol) {noCollisions = nCol;}
-    
+    void setItem(const T *pItem) { ptrItem = pItem; }
+    void setNext(HashNode *nextPtr) { next = nextPtr; }
+    void setCollisions(int col) { collisions = col; }
+
     //getters
-    ItemType* getItem() const {return ptrItem;}
-    HashNode* getNext() const {return next;}
-    int getNoCollisions() const {return noCollisions;}
+    T *getItem() const { return ptrItem; }
+    HashNode *getNext() const { return next; }
+    int getCollisions() const { return collisions; }
 };
 
 #endif /* HashNode_h */
