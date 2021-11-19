@@ -13,7 +13,7 @@ template <class T>
 class HashTable
 {
 private:
-    LinkedList<T> *hashAry;
+    LinkedList<HashNode<T>> *hashAry;
     int hashSize;
     int count;
     int hash(const T &key);
@@ -23,13 +23,13 @@ public:
     {
         count = 0;
         hashSize = 53;
-        hashAry = new HashNode<T>[hashSize];
+        hashAry = new LinkedList<HashNode<T>>[hashSize];
     }
     HashTable(int n)
     {
         count = 0;
         hashSize = n;
-        hashAry = new HashNode<T>[hashSize];
+        hashAry = new LinkedList<HashNode<T>>[hashSize];
     }
     ~HashTable() { delete[] hashAry; }
 
