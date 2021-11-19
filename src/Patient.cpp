@@ -50,7 +50,7 @@ void Patient::toStream(ostream *out)
  * 
  * TODO: remove in final version.
  */
-void Patient::print(void)
+void Patient::print(void) const
 {
   cout << "ID: " << id << endl;
   cout << "Name: " << name << endl;

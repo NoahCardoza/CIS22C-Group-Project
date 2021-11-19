@@ -39,7 +39,7 @@ public:
   bool fromStream(std::ifstream *in);
   void toStream(std::ostream *out);
   int hash(int);
-  void print(void);
+  void print(void) const;
 
   // getters
   void setId(string id) { this->id = id; }
