@@ -90,7 +90,7 @@ BinaryNode<T>* BinarySearchTree<T>::_insert(BinaryNode<T>* nodePtr,
         return nodePtr;
     }
     if (nodePtr) {
-        if (nodePtr->getItem() > newNodePtr->getItem()) {
+        if (*(nodePtr->getItem()) > *(newNodePtr->getItem())) {
             if (!_insert(nodePtr->getLeftPtr(), newNodePtr)) {
                 nodePtr->setLeftPtr(newNodePtr);
                 this->count++;
@@ -118,12 +118,12 @@ BinaryNode<T>* BinarySearchTree<T>::_search(BinaryNode<T>* nodePtr,
     if (nodePtr == nullptr) {
         return found;
     }
-
-    if (nodePtr->getItem() > target) {
+    
+    if (*(nodePtr->getItem()) > *(target)) {
         return _search(nodePtr->getLeftPtr(), target);
     }
     else {
-        if (nodePtr->getItem() < target) {
+        if (*(nodePtr->getItem()) < *(target)) {
             return _search(nodePtr->getRightPtr(), target);
         }
         else {
