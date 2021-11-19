@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "BinarySearchTree.h"
+#include "HashTable.h"
 
 using namespace std;
 
@@ -23,12 +24,15 @@ class Database
 private:
   bool opened = false;
   BinarySearchTree<T *> bst;
+  HashTable<T *> hashmap;
   vector<T *> records;
   virtual string getHeader() = 0;
 
 public:
   bool open(string filename);
   bool save(string filename);
+  T *primarySearch(T *search);
+  T *secondarySearch(T *search);
 
   /**
    * Empties the vector holding the
@@ -87,12 +91,6 @@ bool Database<T>::open(string filename)
     }
   }
 
-  record->setName("Steven Hui");
-
-  bst.search(record, record);
-
-  record->print();
-
   // delete the left over empty record
   delete record;
 
@@ -133,4 +131,29 @@ bool Database<T>::save(string filename)
   return true;
 }
 
+template <class T>
+T *Database<T>::primarySearch(T *)
+{
+  T *ret;
+
+  if (hashmap.search(search, ret))
+  {
+    return ret;
+  };
+
+  return nullptr;
+}
+
+template <class T>
+T *Database<T>::secondarySearch(T *search)
+{
+  T *ret;
+
+  if (bst.search(search, ret))
+  {
+    return ret;
+  };
+
+  return nullptr;
+}
 #endif
