@@ -13,65 +13,64 @@
 
 class IOManager
 {
-	public:
-		/**
+public:
+	/**
 		 * collects the input from the user and creates a new patient
 		 */
-		void createData();
+	void createData();
 
-		/**
+	/**
 		 * collects the input from the user and deletes a patient
 		 */
-		void deleteData();
+	void deleteData();
 
-		/**
+	/**
 		 * undoes a delete if a user has recently deletedData (gets information from deletedStack)
 		 */
-		void undoDelete();
+	void undoDelete();
 
-		/**
+	/**
 		 * Collects input from the user, then finds the specified patient using it's primary key
 		 */
-		void findDataWithPrimaryKey();
+	void findDataWithPrimaryKey();
 
-		/**
+	/**
 		 * collects the input from the user then finds the specified patients using their secondary key
 		 */
-		void findDataWithSecondaryKey();
+	void findDataWithSecondaryKey();
 
-		/**
+	/**
 		 * displays all the current data
 		 */
-		void display();
+	void display();
 
-		/**
+	/**
 		 * starts the main loop which displays the menu and collects the users input, then calls the appropriate function to handle the rest
 		 */
-		void startMainLoop();
+	void startMainLoop();
 
-		/**
+	/**
 		 * creates a new IO manager object with the hashtable DB and the BST DB
 		 */
-		IOManager(HashTable<Patient>&, BinarySearchTree<Patient>&);
+	IOManager(HashTable<Patient> &, BinarySearchTree<Patient> &);
 
-	private:
-		/**
+private:
+	/**
 		 * hashtable DB to store the patients
 		 */
-		HashTable<Patient> hashtableDB;
+	HashTable<Patient> hashtableDB;
 
-		/**
+	/**
 		 * BST DB to store the patients.
 		 */
-		BinarySearchTree<Patient> bstDB;
+	BinarySearchTree<Patient> bstDB;
 
-		Database<Patient> database;
+	Database<Patient> database;
 
-		/**
+	/**
 		 * stack used for the undoDelete() method.
 		 * whenever a patient is deleted, it will be pushed onto this stack.
 		 * Whenever the user saves everything to a file, this stack gets refreshed.
 		 */
-		std::stack<Patient> deletedStack;
-
+	std::stack<Patient> deletedStack;
 };

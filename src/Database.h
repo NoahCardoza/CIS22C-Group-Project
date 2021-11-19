@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <vector>
 
+#include "BinarySearchTree.h"
+
 using namespace std;
 
 using std::string;
@@ -20,6 +22,7 @@ class Database
 {
 private:
   bool opened = false;
+  BinarySearchTree<T *> bst;
   vector<T *> records;
   virtual string getHeader() = 0;
 
@@ -78,10 +81,17 @@ bool Database<T>::open(string filename)
   {
     if (record->fromStream(&in))
     {
+      bst.insert(record);
       records.push_back(record);
       record = new T();
     }
   }
+
+  record->setName("Steven Hui");
+
+  bst.search(record, record);
+
+  record->print();
 
   // delete the left over empty record
   delete record;
