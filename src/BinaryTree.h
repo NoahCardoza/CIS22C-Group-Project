@@ -7,52 +7,60 @@
 
 #include "BinaryNode.h"
 
-
-template<class T>
+template <class T>
 class BinaryTree
 {
 protected:
-	BinaryNode<T>* rootPtr;		// ptr to root node
-	int count;	        	// number of nodes in tree
+	BinaryNode<T> *rootPtr; // ptr to root node
+	int count;				// number of nodes in tree
 
 public:
 	// "admin" functions
-	BinaryTree() { rootPtr = 0; count = 0; }
-	BinaryTree(const BinaryTree<T>& tree) { }
+	BinaryTree()
+	{
+		rootPtr = 0;
+		count = 0;
+	}
+	BinaryTree(const BinaryTree<T> &tree) {}
 	virtual ~BinaryTree() { destroyTree(rootPtr); }
 
 	// common functions for all binary trees
 	bool isEmpty() const { return count == 0; }
 	int getCount() const { return count; }
-	void clear() { destroyTree(rootPtr); rootPtr = 0; count = 0; }
-	void preOrder(void visit(T&)) const { _preorder(visit, rootPtr); }
-	void inOrder(void visit(T&)) const { _inorder(visit, rootPtr); }
-	void postOrder(void visit(T&)) const { _postorder(visit, rootPtr); }
-	void printTree(void visit(T&, int)) const { _printTree(visit, rootPtr, 1); }
-	void printLeafNodes(void visit(T&)) const { _printLeafNodes(visit, rootPtr); }
+	void clear()
+	{
+		destroyTree(rootPtr);
+		rootPtr = 0;
+		count = 0;
+	}
+	void preOrder(void visit(T &)) const { _preorder(visit, rootPtr); }
+	void inOrder(void visit(T &)) const { _inorder(visit, rootPtr); }
+	void postOrder(void visit(T &)) const { _postorder(visit, rootPtr); }
+	void printTree(void visit(T &, int)) const { _printTree(visit, rootPtr, 1); }
+	void printLeafNodes(void visit(T &)) const { _printLeafNodes(visit, rootPtr); }
 
 	// abstract functions to be implemented by derived class
-	virtual bool insert(const T& newData) = 0;
+	virtual bool insert(const T &newData) = 0;
 	//virtual bool remove(const T &data) = 0;
-	virtual bool search(const T& target, T& returnedItem) const = 0;
+	virtual bool search(const T &target, T &returnedItem) const = 0;
 
 private:
 	// delete all nodes from the tree
-	void destroyTree(BinaryNode<T>* nodePtr);
+	void destroyTree(BinaryNode<T> *nodePtr);
 
 	// internal traverse
-	void _preorder(void visit(T&), BinaryNode<T>* nodePtr) const;
-	void _inorder(void visit(T&), BinaryNode<T>* nodePtr) const;
-	void _postorder(void visit(T&), BinaryNode<T>* nodePtr) const;
-	void _printTree(void visit(T&, int), BinaryNode<T>* nodePtr, int level) const;
-	void _printLeafNodes(void visit(T&), BinaryNode<T>* rootPtr) const;
+	void _preorder(void visit(T &), BinaryNode<T> *nodePtr) const;
+	void _inorder(void visit(T &), BinaryNode<T> *nodePtr) const;
+	void _postorder(void visit(T &), BinaryNode<T> *nodePtr) const;
+	void _printTree(void visit(T &, int), BinaryNode<T> *nodePtr, int level) const;
+	void _printLeafNodes(void visit(T &), BinaryNode<T> *rootPtr) const;
 };
 
 //Destroy the entire tree
-template<class T>
-void BinaryTree<T>::destroyTree(BinaryNode<T>* nodePtr)
+template <class T>
+void BinaryTree<T>::destroyTree(BinaryNode<T> *nodePtr)
 {
-	if (nodePtr) // != NULL
+	if (nodePtr) // != nullptr
 	{
 		destroyTree(nodePtr->getLeftPtr());
 		destroyTree(nodePtr->getRightPtr());
@@ -62,25 +70,24 @@ void BinaryTree<T>::destroyTree(BinaryNode<T>* nodePtr)
 }
 
 //Preorder Traversal
-template<class T>
-void BinaryTree<T>::_preorder(void visit(T&), BinaryNode<T>* nodePtr) const
+template <class T>
+void BinaryTree<T>::_preorder(void visit(T &), BinaryNode<T> *nodePtr) const
 {
 	/* Write your code here */
-	if (nodePtr) // != NULL    // added by Omar
+	if (nodePtr) // != nullptr    // added by Omar
 	{
 		T item = nodePtr->getItem();
 		visit(item);
 		_preorder(visit, nodePtr->getLeftPtr());
 		_preorder(visit, nodePtr->getRightPtr());
 	}
-
 }
 
 //Inorder Traversal
-template<class T>
-void BinaryTree<T>::_inorder(void visit(T&), BinaryNode<T>* nodePtr) const
+template <class T>
+void BinaryTree<T>::_inorder(void visit(T &), BinaryNode<T> *nodePtr) const
 {
-	if (nodePtr) // != NULL
+	if (nodePtr) // != nullptr
 	{
 		T item = nodePtr->getItem();
 		_inorder(visit, nodePtr->getLeftPtr());
@@ -90,11 +97,12 @@ void BinaryTree<T>::_inorder(void visit(T&), BinaryNode<T>* nodePtr) const
 }
 
 //Postorder Traversal
-template<class T>
-void BinaryTree<T>::_postorder(void visit(T&), BinaryNode<T>* nodePtr) const
+template <class T>
+void BinaryTree<T>::_postorder(void visit(T &), BinaryNode<T> *nodePtr) const
 {
 	/* Write your code here */
-	if (nodePtr) {// added by Omar
+	if (nodePtr)
+	{ // added by Omar
 		T item = nodePtr->getItem();
 		_postorder(visit, nodePtr->getLeftPtr());
 		visit(item);
@@ -103,11 +111,11 @@ void BinaryTree<T>::_postorder(void visit(T&), BinaryNode<T>* nodePtr) const
 }
 
 //Prints tree as an indented list
-template<class T>
-void BinaryTree<T>::_printTree(void visit(T&, int), BinaryNode<T>* nodePtr, int level) const
+template <class T>
+void BinaryTree<T>::_printTree(void visit(T &, int), BinaryNode<T> *nodePtr, int level) const
 {
 	/* Write your code here */
-	if (nodePtr) // != NULL  // added by Omar
+	if (nodePtr) // != nullptr  // added by Omar
 	{
 		T item = nodePtr->getItem();
 		visit(item, level);
@@ -117,10 +125,11 @@ void BinaryTree<T>::_printTree(void visit(T&, int), BinaryNode<T>* nodePtr, int 
 	}
 }
 
-template<class T>
-void BinaryTree<T>::_printLeafNodes(void visit(T&), BinaryNode<T>* nodePtr) const {
+template <class T>
+void BinaryTree<T>::_printLeafNodes(void visit(T &), BinaryNode<T> *nodePtr) const
+{
 
-	if (!nodePtr) // != NULL
+	if (!nodePtr) // != nullptr
 		return;
 
 	if (nodePtr->isLeaf())
@@ -137,4 +146,3 @@ void BinaryTree<T>::_printLeafNodes(void visit(T&), BinaryNode<T>* nodePtr) cons
 }
 
 #endif
-
