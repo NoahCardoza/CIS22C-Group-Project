@@ -146,7 +146,8 @@ void IOManager::findDataWithPrimaryKey()
 	std::cout << "Enter the primary key: ";
 	std::cin >> primaryKey;
 
-	Patient *patient = database.primarySearch(&Patient(primaryKey, ""));
+	Patient myPatient = Patient(primaryKey, "");
+	Patient *patient = database.primarySearch(&myPatient);
 	//TODO: this should be a vector / array not a pointer
 
 	if (patient == nullptr)
@@ -165,7 +166,8 @@ void IOManager::findDataWithSecondaryKey()
 	std::cout << "Enter the secondary key: ";
 	std::cin >> secondaryKey;
 
-	Patient *patient = database.secondarySearch(&Patient("", secondaryKey));
+	Patient myPatient = Patient("", secondaryKey);
+	Patient *patient = database.secondarySearch(&myPatient);
 
 	if (patient == nullptr)
 	{

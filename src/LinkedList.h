@@ -8,6 +8,12 @@
 #ifndef LinkedList_h
 #define LinkedList_h
 
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <stack>
+
 #include "HashNode.h"
 
 template <class T>
