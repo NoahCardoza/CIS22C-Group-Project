@@ -12,39 +12,39 @@ template <class T>
 class HashNode
 {
 private:
-    T *ptrItem;
-    HashNode *next;
-    int collisions;
+	T *ptrItem;
+	HashNode *next;
+	int collisions;
 
 public:
-    //constructors
-    HashNode()
-    {
-        next = NULL;
-        collisions = 0;
-    }
-    HashNode(T *pItem)
-    {
-        ptrItem = pItem;
-        next = NULL;
-        collisions = 0;
-    }
-    HashNode(T *pItem, HashNode *nextPtr, int col)
-    {
-        ptrItem = pItem;
-        nextPtr = NULL;
-        collisions = col;
-    }
+	//constructors
+	HashNode()
+	{
+		next = nullptr;
+		collisions = 0;
+	}
+	HashNode(T *pItem)
+	{
+		ptrItem = pItem;
+		next = nullptr;
+		collisions = 0;
+	}
+	HashNode(T *pItem, HashNode *nextPtr, int col)
+	{
+		ptrItem = pItem;
+		nextPtr = nullptr;
+		collisions = col;
+	}
 
-    //setters
-    void setItem(const T *pItem) { ptrItem = pItem; }
-    void setNext(HashNode *nextPtr) { next = nextPtr; }
-    void setCollisions(int col) { collisions = col; }
+	//setters
+	void setItem(const T *pItem) { ptrItem = pItem; }
+	void setNext(HashNode *nextPtr) { next = nextPtr; }
+	void setCollisions(int col) { collisions = col; }
 
-    //getters
-    T *getItem() const { return ptrItem; }
-    HashNode *getNext() const { return next; }
-    int getCollisions() const { return collisions; }
+	//getters
+	T *getItem() const { return ptrItem; }
+	HashNode *getNext() const { return next; }
+	int getCollisions() const { return collisions; }
 };
 
 #endif /* HashNode_h */
