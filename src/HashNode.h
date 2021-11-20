@@ -13,7 +13,7 @@ class HashNode
 {
 private:
     T *ptrItem;
-    HashNode *next;
+    HashNode<T> *next;
     int collisions;
 
 public:
@@ -29,7 +29,7 @@ public:
         next = NULL;
         collisions = 0;
     }
-    HashNode(T *pItem, HashNode *nextPtr, int col)
+    HashNode(T *pItem, HashNode<T> *nextPtr, int col)
     {
         ptrItem = pItem;
         nextPtr = NULL;
@@ -38,12 +38,12 @@ public:
 
     //setters
     void setItem(const T *pItem) { ptrItem = pItem; }
-    void setNext(HashNode *nextPtr) { next = nextPtr; }
+    void setNext(HashNode<T> *nextPtr) { next = nextPtr; }
     void setCollisions(int col) { collisions = col; }
 
     //getters
     T *getItem() const { return ptrItem; }
-    HashNode *getNext() const { return next; }
+    HashNode<T> *getNext() const { return next; }
     int getCollisions() const { return collisions; }
 };
 
