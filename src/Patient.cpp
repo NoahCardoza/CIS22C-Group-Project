@@ -47,7 +47,7 @@ void Patient::toStream(ostream *out)
 /**
  * Print out all the properties of the
  * class.
- * 
+ *
  * TODO: remove in final version.
  */
 void Patient::print(void) const
