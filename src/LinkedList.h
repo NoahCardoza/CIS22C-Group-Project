@@ -24,16 +24,17 @@ private:
 	int length;
 
 public:
-	LinkedList();  //constructor
+	LinkedList();	 //constructor
 	~LinkedList(); //destructor
 
 	//Linked List Operations
 	int getLength() const { return length; }
-	void insertNode(const T *);
+	void insertNode(T *dataIn);
 	bool deleteNode(const T *, T **);
 
 	void displayList() const;
-	bool searchList(const T *, T **) const;
+	bool searchList(const T *, T *) const;
+	T *pop();
 };
 
 template <class T>
@@ -46,11 +47,11 @@ LinkedList<T>::LinkedList()
 
 //The insertNode function inserts a new node in a sorted linked list
 template <class T>
-void LinkedList<T>::insertNode(const T *dataIn)
+void LinkedList<T>::insertNode(T *dataIn)
 {
 	HashNode<T> *newNode; //A new node
-	HashNode<T> *pCur;	  //To traverse the list
-	HashNode<T> *pPre;	  //The previous node
+	HashNode<T> *pCur;		//To traverse the list
+	HashNode<T> *pPre;		//The previous node
 
 	//Allocate a new node and store the pointer to object there
 	newNode = new HashNode<T>;
@@ -147,7 +148,7 @@ void LinkedList<T>::displayList() const
 // and copies the data in that node to the output parameter
 //**************************************************
 template <class T>
-bool LinkedList<T>::searchList(const T *target, T **dataOut) const
+bool LinkedList<T>::searchList(const T *target, T *dataOut) const
 {
 	bool found = false; // assume target not found
 	HashNode<T> *pCur;	// To move through the list
@@ -163,7 +164,7 @@ bool LinkedList<T>::searchList(const T *target, T **dataOut) const
 	// If found, copy data to the output parameter, and change the flag to true
 	if (pCur && pCur->getItem() == target)
 	{
-		*dataOut = pCur->getItem();
+		dataOut = pCur->getItem();
 		found = true;
 	}
 
@@ -197,4 +198,12 @@ LinkedList<T>::~LinkedList()
 
 	delete head; // delete the sentinel node
 }
+
+template <class T>
+T *LinkedList<T>::pop()
+{
+	// TODO: implement this
+	return head->getItem();
+}
+
 #endif /* LinkedList_h */

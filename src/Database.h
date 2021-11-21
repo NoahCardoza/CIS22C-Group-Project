@@ -24,7 +24,7 @@ class Database
 private:
   bool opened = false;
   BinarySearchTree<T *> bst;
-  HashTable<T *> hashmap;
+  HashTable<T> hashmap;
   vector<T *> records;
   virtual string getHeader() = 0;
 
@@ -86,6 +86,7 @@ bool Database<T>::open(string filename)
     if (record->fromStream(&in))
     {
       bst.insert(record);
+      hashmap.insert(record);
       records.push_back(record);
       record = new T();
     }

@@ -14,7 +14,7 @@ class HashNode
 private:
     T *ptrItem;
     HashNode<T> *next;
-    
+
 public:
     //constructors
     HashNode()
@@ -27,11 +27,10 @@ public:
         ptrItem = pItem;
     }
 
-
     //setters
-    void setItem(const T *pItem) { ptrItem = pItem; }
+    void setItem(T *pItem) { ptrItem = pItem; }
     void setNext(HashNode<T> *nextPtr) { next = nextPtr; }
-    
+
     //getters
     T *getItem() const { return ptrItem; }
     HashNode<T> *getNext() const { return next; }
