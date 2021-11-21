@@ -8,12 +8,6 @@
 
 using namespace std;
 
-int Patient::hash(int size)
-{
-  // TODO: implement this function
-  return size;
-}
-
 bool Patient::fromStream(ifstream *in)
 {
   // if nothing is read in for the id
