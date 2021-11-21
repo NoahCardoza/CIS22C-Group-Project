@@ -75,14 +75,14 @@ public:
   void setGender(char gender) { this->gender = gender; }
 
   // setters
-  string getId() { return id; }
-  string getName() { return name; }
-  int getCheckin() { return checkin; }
-  int getCheckout() { return checkout; }
-  char getStatus() { return status; }
-  int getAge() { return age; }
-  string getCountry() { return country; }
-  char getGender() { return gender; }
+  string getId() const { return id; }
+  string getName() const { return name; }
+  int getCheckin() const { return checkin; }
+  int getCheckout() const { return checkout; }
+  char getStatus() const { return status; }
+  int getAge() const { return age; }
+  string getCountry() const { return country; }
+  char getGender() const { return gender; }
 
   // overloaded operators
   bool operator==(const Patient &p);
