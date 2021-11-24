@@ -32,7 +32,7 @@ public:
   bool open(string filename);
   bool save(string filename);
   T *primarySearch(T *search);
-  T *secondarySearch(T *search);
+  bool secondarySearch(T *search, std::vector<T *> &ret);
 
   /**
    * Empties the vector holding the
@@ -133,11 +133,11 @@ bool Database<T>::save(string filename)
 }
 
 template <class T>
-T *Database<T>::primarySearch(T *)
+T *Database<T>::primarySearch(T *search)
 {
-  T *ret;
+  T *ret = nullptr;
 
-  if (hashmap.search(search, ret))
+  if (hashmap.search(ret, search))
   {
     return ret;
   };
@@ -146,15 +146,8 @@ T *Database<T>::primarySearch(T *)
 }
 
 template <class T>
-T *Database<T>::secondarySearch(T *search)
+bool Database<T>::secondarySearch(T *search, std::vector<T *> &ret)
 {
-  T *ret;
-
-  if (bst.search(search, ret))
-  {
-    return ret;
-  };
-
-  return nullptr;
+  return bst.search(search, &ret);
 }
 #endif
