@@ -47,8 +47,8 @@ public:
 
     bool isEmpty() const { return count == 0; }
     bool insert(T *itemIn);
-    bool remove(T **itemOut, const T *key);
-    bool search(T **itemOut, const T *key);
+    bool remove(T *itemOut, const T *key);
+    bool search(T *itemOut, const T *key);
     int newSize();
     void rehash();
     bool isPrime(int);
@@ -110,21 +110,19 @@ bool HashTable<T>::insert(T *itemIn)
    if not found, returns false
  *~**/
 template <class T>
-bool HashTable<T>::search(T **itemOut, const T *key)
+bool HashTable<T>::search(T *result, const T *query)
 {
-    int homeAddr = hash(key);
-    bool found = false;
+    hashAry[hash(query)].displayList();
 
-    found = hashAry[homeAddr].searchList(key, itemOut);
-
-    return found;
+    return hashAry[hash(query)]
+        .searchList(query, result);
 }
 
 /*~*~*~*
    Removes the item with the matching key from the hash table
 *~**/
 template <class T>
-bool HashTable<T>::remove(T **itemOut, const T *key)
+bool HashTable<T>::remove(T *itemOut, const T *key)
 {
     int homeAddr = hash(key);
     bool deleted = false;

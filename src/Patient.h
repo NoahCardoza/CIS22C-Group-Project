@@ -85,9 +85,10 @@ public:
   char getGender() const { return gender; }
 
   // overloaded operators
-  bool operator==(const Patient &p);
-  bool operator<(const Patient &p);
-  bool operator>(const Patient &p);
+  bool operator==(const Patient &p) const;
+  bool operator!=(const Patient &p) const;
+  bool operator<(const Patient &p) const;
+  bool operator>(const Patient &p) const;
 };
 
 #endif

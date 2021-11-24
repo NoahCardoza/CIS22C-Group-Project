@@ -59,17 +59,22 @@ void Patient::print(void) const
  * Overloaded Operators
  */
 
-bool Patient::operator==(const Patient &p)
+bool Patient::operator==(const Patient &p) const
 {
-  return name == p.name;
+  return name == p.name || id == p.id;
 }
 
-bool Patient::operator<(const Patient &p)
+bool Patient::operator!=(const Patient &p) const
+{
+  return name != p.name && id != p.id;
+}
+
+bool Patient::operator<(const Patient &p) const
 {
   return name < p.name;
 }
 
-bool Patient::operator>(const Patient &p)
+bool Patient::operator>(const Patient &p) const
 {
   return name > p.name;
 }

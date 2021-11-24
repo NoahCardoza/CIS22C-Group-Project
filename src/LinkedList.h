@@ -134,12 +134,10 @@ void LinkedList<T>::displayList() const
 	{
 		// Display the value in this node.
 
-		std::cout << pCur->getItem();
-
-		// Move to the next node.
+		pCur->getItem()->print();
+		std::cout << std::endl;
 		pCur = pCur->getNext();
 	}
-	std::cout << std::endl;
 }
 
 //**************************************************
@@ -150,25 +148,24 @@ void LinkedList<T>::displayList() const
 template <class T>
 bool LinkedList<T>::searchList(const T *target, T *dataOut) const
 {
-	bool found = false; // assume target not found
-	HashNode<T> *pCur;	// To move through the list
+	HashNode<T> *pCur; // To move through the list
 
 	// Position pCur: skip the head of the list.
 	pCur = head->getNext();
+
 	// Find location: skip all nodes whose name is less than target's name
-	while (pCur && pCur->getItem() < target)
+	while (pCur && (*pCur->getItem()) != (*target))
 	{
 		pCur = pCur->getNext();
 	}
 
-	// If found, copy data to the output parameter, and change the flag to true
-	if (pCur && pCur->getItem() == target)
+	if (pCur)
 	{
 		dataOut = pCur->getItem();
-		found = true;
+		return true;
 	}
 
-	return found;
+	return false;
 }
 
 //**************************************************
