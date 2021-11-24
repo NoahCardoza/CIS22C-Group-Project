@@ -13,7 +13,7 @@ public:
 	// insert a node at the correct location
 	bool insert(const T &item);
 	// remove a node if found
-	//bool remove(const T &item);
+	bool remove(const T &item);
 	// find a target node
 	bool search(const T &target, T &returnedItem) const;
 	// find the smallest node
@@ -35,13 +35,13 @@ private:
 	BinaryNode<T> *_findLargest(BinaryNode<T> *nodePtr, T &smallest) const;
 
 	// internal remove node: locate and delete target node under nodePtr subtree
-	// BinaryNode<T>* _remove(BinaryNode<T>* nodePtr, const T target, bool &success);
+	BinaryNode<T>* _remove(BinaryNode<T>* nodePtr, const T target, bool &success);
 
 	// delete target node from tree, called by internal remove node
-	//BinaryNode<T>* _removeNode(BinaryNode<T>* targetNodePtr);
+	BinaryNode<T>* _removeNode(BinaryNode<T>* targetNodePtr);
 
 	// remove the leftmost node in the left subtree of nodePtr
-	//BinaryNode<T>* _removeLeftmostNode(BinaryNode<T>* nodePtr, T &successor);
+	BinaryNode<T>* _removeLeftmostNode(BinaryNode<T>* nodePtr, T &successor);
 };
 
 ///////////////////////// public function definitions ///////////////////////////
@@ -111,10 +111,10 @@ BinaryNode<T> *BinarySearchTree<T>::_insert(BinaryNode<T> *nodePtr,
 // - return nullptr if target not found, otherwise
 // - returns a pointer to the node that matched the target
 template <class T>
-BinaryNode<T> *BinarySearchTree<T>::_search(BinaryNode<T> *nodePtr,
+BinaryNode<T>* BinarySearchTree<T>::_search(BinaryNode<T> *nodePtr,
 											const T &target) const
 {
-	victor<BinaryNode<T>*> found = nullptr; // vector of BinaryNode<T>* to hold duplicate names objects. 
+	BinaryNode<T>*> found() = nullptr; 
 
 	if (nodePtr == nullptr)
 	{
@@ -133,10 +133,70 @@ BinaryNode<T> *BinarySearchTree<T>::_search(BinaryNode<T> *nodePtr,
 		}
 		else
 		{
-			found.push_back(nodePtr);
+			found = nodePte;
 			return found;
 		}
 	}
 }
+
+template <class T>
+bool remove(const T &item)
+{
+   parent = null
+   cur = tree⇢root
+   while (cur is not null) { // Search for node
+      if (cur⇢key == key) { // Node found 
+         if (cur⇢left is null && cur⇢right is null) { // Remove leaf
+            if (par is null) // Node is root
+               tree⇢root = null
+            else if (par⇢left == cur) 
+               par⇢left = null
+            else
+               par⇢right = null
+         }
+         else if (cur⇢right is null) {                // Remove node with only left child
+            if (par is null) // Node is root
+               tree⇢root = cur⇢left
+            else if (par⇢left == cur) 
+               par⇢left = cur⇢left
+            else
+               par⇢right = cur⇢left
+         }
+         else if (cur⇢left is null) {                // Remove node with only right child
+            if (par is null) // Node is root
+               tree⇢root = cur⇢right
+            else if (par⇢left == cur) 
+               par⇢left = cur⇢right
+            else
+               par⇢right = cur⇢right
+         }
+         else {                                      // Remove node with two children
+            // Find successor (leftmost child of right subtree)
+            suc = cur⇢right
+            while (suc⇢left is not null)
+               suc = suc⇢left
+            successorData = Create copy of suc's data
+            BSTRemove(tree, suc⇢key)     // Remove successor
+            Assign cur's data with successorData
+         }
+         return // Node found and removed
+      }
+      else if (cur⇢key < key) { // Search right
+         par = cur
+         cur = cur⇢right
+      }
+      else {                     // Search left
+         par = cur
+         cur = cur⇢left
+      }
+   }
+   return // Node not found
+	   _remove(BinaryNode<T>* nodePtr, const T target, bool &success);
+	   _removeNode(BinaryNode<T>* targetNodePtr);
+	   _removeLeftmostNode(BinaryNode<T>* nodePtr, T &successor);// remove most left node
+}
+	
+
+
 
 #endif
