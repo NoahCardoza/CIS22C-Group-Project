@@ -72,6 +72,20 @@ bool BinarySearchTree<T>::search(const T &anEntry, T &returnedItem) const
 	return true;
 }
 
+//-Wrapper for _remove.
+//- it calls the private _remove that return bool value
+//- if a node is found and removed/deleted
+template <class T>
+bool BinarySearchTree<T>::remove(const T &item)
+{
+   if(_removeNode(item))
+   {
+	return true;
+   }
+   return false;
+}
+
+
 //////////////////////////// private functions ////////////////////////////////////////////
 
 //Implementation of the insert operation
@@ -143,21 +157,12 @@ vector<BinaryNode<ItemType>*> BinarySearchTree<T>::_search(BinaryNode<T> *nodePt
 	}
 }
 
-template <class T>
-bool BinarySearchTree<T>::remove(const T &item)
-{
-   if(_removeNode(item))
-   {
-	return true;
-   }
-   return false;
-}
-
-
+//-Implementation for the remove operation
+// - return true if target is found and deleted, otherwise
+// - returns false if the node is not found
 template <class T>
 bool BinarySearchTree<T>::BinarySearchTree<T>::_remove(const T &target)
 {
-	
    BinaryNode<T> * parent = nullptr;
    BinaryNode<T> * cur = root;
    while (cur != null) { // Search for node
