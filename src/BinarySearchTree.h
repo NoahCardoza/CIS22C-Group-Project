@@ -148,7 +148,7 @@ vector<BinaryNode<ItemType>*> BinarySearchTree<T>::_search(BinaryNode<T> *nodePt
 		else
 		{
 			 found.push_back(nodePtr);
-			 if (nodePtr->getRightPtr() != nullptr && (nodePtr->getItem()) == target) // if right node is not null and equal target
+			 if (nodePtr->getRightPtr() != nullptr && (nodePtr->getRightPtr().getItem()) == target) // if right node is not null and equal target
 	                 {
                                  return _search(nodePtr->getRightPtr(), target);
                          }
