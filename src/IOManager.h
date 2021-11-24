@@ -57,19 +57,9 @@ public:
 	/**
 	* creates a new IO manager object with the hashtable DB and the BST DB
 	*/
-	IOManager(HashTable<Patient> &, BinarySearchTree<Patient> &);
+	IOManager();
 
 private:
-	/**
-	 * hashtable DB to store the patients
-	 */
-	HashTable<Patient> hashtableDB;
-
-	/**
-	 * BST DB to store the patients.
-	 */
-	BinarySearchTree<Patient> bstDB;
-
 	PatientDatabase database;
 
 	/**
@@ -80,10 +70,14 @@ private:
 	std::stack<Patient> deletedStack;
 };
 
-IOManager::IOManager(HashTable<Patient> &hashTable, BinarySearchTree<Patient> &bst)
+IOManager::IOManager()
 {
-	this->bstDB = bst;
-	this->hashtableDB = hashTable;
+	// TODO: probably move this to the main loop,
+	// or another init method which asks the user
+	// which file to open maybe even accept argv
+	// for funzies and quicker testing?
+
+	this->database.open("../data/small.csv");
 }
 
 void IOManager::startMainLoop()
@@ -99,7 +93,7 @@ void IOManager::startMainLoop()
 		std::cout << "\t6. Display All Data" << std::endl;
 		std::cout << "\t7. Save to file" << std::endl;
 		std::cout << "\t8. Exit\n"
-				  << std::endl;
+							<< std::endl;
 
 		int studentOption;
 		cin >> studentOption;
@@ -148,7 +142,6 @@ void IOManager::findDataWithPrimaryKey()
 
 	Patient myPatient = Patient(primaryKey, "");
 	Patient *patient = database.primarySearch(&myPatient);
-	//TODO: this should be a vector / array not a pointer
 
 	if (patient == nullptr)
 	{
@@ -167,16 +160,20 @@ void IOManager::findDataWithSecondaryKey()
 	std::cin >> secondaryKey;
 
 	Patient myPatient = Patient("", secondaryKey);
-	Patient *patient = database.secondarySearch(&myPatient);
+	std::vector<Patient *> patients;
 
-	if (patient == nullptr)
+	if (database.secondarySearch(&myPatient, patients))
 	{
 		std::cout << "No patient found with that secondary key" << std::endl;
 		return;
 	}
 
-	std::cout << "Patient found:" << std::endl;
-	patient->toStream(&std::cout);
+	std::cout << "Patient(s) found:" << std::endl;
+
+	for (auto const &patient : patients)
+	{
+		patient->toStream(&std::cout);
+	}
 }
 
 void IOManager::saveToFile()

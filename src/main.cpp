@@ -5,10 +5,8 @@
 
 int main(void)
 {
-	HashTable<Patient> table;
-	BinarySearchTree<Patient> bst;
-	IOManager getIO = IOManager(table, bst);
+	IOManager getIO = IOManager();
 
 	getIO.startMainLoop();
-  	return 0;
+	return 0;
 }
