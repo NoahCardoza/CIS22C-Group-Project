@@ -12,7 +12,7 @@ class BinaryTree
 {
 protected:
 	BinaryNode<T> *rootPtr; // ptr to root node
-	int count;				// number of nodes in tree
+	int count;							// number of nodes in tree
 
 public:
 	// "admin" functions
@@ -42,7 +42,7 @@ public:
 	// abstract functions to be implemented by derived class
 	virtual bool insert(const T &newData) = 0;
 	//virtual bool remove(const T &data) = 0;
-	virtual bool search(const T &target, T &returnedItem) const = 0;
+	virtual bool search(const T &target, std::vector<T> *returnedItem) const = 0;
 
 private:
 	// delete all nodes from the tree
