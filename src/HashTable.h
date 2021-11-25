@@ -46,9 +46,9 @@ public:
     void displayStatistics();
 
     bool isEmpty() const { return count == 0; }
-    bool insert(T itemIn);
-    bool remove(T itemOut, const T key);
-    bool search(T itemOut, const T key);
+    bool insert(T *itemIn);
+    bool remove(const T *key, T **itemOut);
+    bool search(const T *key, T **itemOut);
     int newSize();
     void rehash();
     bool isPrime(int);
@@ -77,30 +77,30 @@ int HashTable<T>::hash(const T key)
 template <class T>
 bool HashTable<T>::insert(T itemIn)
 {
-    int homeAddr = hash(itemIn);
-    bool duplicate;
-    T itemOut = nullptr;
+    LinkedList<T> *home = hashAry + hash(itemIn);
 
-    duplicate = hashAry[homeAddr].searchList(itemIn, itemOut);
-    if (duplicate == false)
+    T **dummy = nullptr;
+
+    if (!home->getLength())
     {
-        hashAry[homeAddr].insertNode(itemIn);
-        if (hashAry[homeAddr].getLength() == 1)
-        {
-            count++;
-            double loadfactor = getLoadFactor();
-            if (loadfactor >= 75)
-            {
-                rehash();
-            }
-        }
-        else
-        {
-            collisionCount++;
-        }
-        return true;
+        count++;
+        collisionCount--;
     }
-    return false;
+    else if (home->searchList(itemIn, dummy))
+    {
+        return false;
+    }
+
+    collisionCount++;
+
+    home->insertNode(itemIn);
+
+    if (getLoadFactor() >= 75)
+    {
+        rehash();
+    }
+
+    return true;
 }
 
 /*~*~*~*
@@ -110,10 +110,8 @@ bool HashTable<T>::insert(T itemIn)
    if not found, returns false
  *~**/
 template <class T>
-bool HashTable<T>::search(T result, const T query)
+bool HashTable<T>::search(const T *query, T **result)
 {
-    hashAry[hash(query)].displayList();
-
     return hashAry[hash(query)]
         .searchList(query, result);
 }
@@ -122,17 +120,23 @@ bool HashTable<T>::search(T result, const T query)
    Removes the item with the matching key from the hash table
 *~**/
 template <class T>
-bool HashTable<T>::remove(T itemOut, const T key)
+bool HashTable<T>::remove(const T *key, T **itemOut)
 {
     int homeAddr = hash(key);
-    bool deleted = false;
-    deleted = hashAry[homeAddr].deleteNode(key, itemOut);
+    bool success;
+
+    success = hashAry[homeAddr].deleteNode(key, itemOut);
+
     if (hashAry[homeAddr].getLength() == 0)
     {
         count--;
     }
+    else
+    {
+        collisionCount--;
+    }
 
-    return deleted;
+    return success;
 }
 
 /*~*~*~*
