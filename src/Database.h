@@ -22,34 +22,37 @@ template <class T>
 class Database
 {
 private:
-  bool opened = false;
-  BinarySearchTree<T *> bst;
-  HashTable<T> hashmap;
-  vector<T *> records;
-  virtual string getHeader() = 0;
+	bool opened = false;
+	BinarySearchTree<T *> bst;
+	HashTable<T> hashmap;
+	vector<T *> records;
+	virtual string getHeader() = 0;
 
 public:
-  bool open(string filename);
-  bool save(string filename);
-  T *primarySearch(T *search);
-  bool secondarySearch(T *search, std::vector<T *> &ret);
+	bool open(string filename);
+	bool save(string filename);
+	T *primarySearch(T *search);
+	bool secondarySearch(T *search, std::vector<T *> &ret);
+	bool remove(T &itemOut, T key);
+	bool insert(T &item);
+	bool displayData(void visit(T &));
 
-  /**
+	/**
    * Empties the vector holding the
    * pointers to the records in the
    * database and frees them
    */
-  ~Database(void)
-  {
-    T *record;
+	~Database(void)
+	{
+		T *record;
 
-    while (!records.empty())
-    {
-      record = records.back();
-      records.pop_back();
-      delete record;
-    }
-  }
+		while (!records.empty())
+		{
+			record = records.back();
+			records.pop_back();
+			delete record;
+		}
+	}
 };
 
 /**
@@ -57,97 +60,123 @@ public:
  * to a CSV file that contains the
  * information needed to populate
  * the database.
- * 
+ *
  * Returns success code.
  */
 template <class T>
 bool Database<T>::open(string filename)
 {
-  if (opened)
-  {
-    // you can't open a new database file
-    // while one is already opened
-    return false;
-  }
+	if (opened)
+	{
+		// you can't open a new database file
+		// while one is already opened
+		return false;
+	}
 
-  ifstream in(filename);
+	ifstream in(filename);
 
-  if (!in)
-  {
-    return false;
-  }
+	if (!in)
+	{
+		return false;
+	}
 
-  T *record = new T();
+	T *record = new T();
 
-  in.ignore(127, '\n'); // read past the CSV header
+	in.ignore(127, '\n'); // read past the CSV header
 
-  while (in.good())
-  {
-    if (record->fromStream(&in))
-    {
-      bst.insert(record);
-      hashmap.insert(record);
-      records.push_back(record);
-      record = new T();
-    }
-  }
+	while (in.good())
+	{
+		if (record->fromStream(&in))
+		{
+			bst.insert(record);
+			hashmap.insert(record);
+			records.push_back(record);
+			record = new T();
+		}
+	}
 
-  // delete the left over empty record
-  delete record;
+	// delete the left over empty record
+	delete record;
 
-  opened = true;
+	opened = true;
 
-  return true;
+	return true;
 }
 
 /**
  * Accept a string representing the path
  * for which the database in memory will
  * be saved to the filesystem.
- * 
+ *
  * Returns success code.
  */
 template <class T>
 bool Database<T>::save(string filename)
 {
-  if (!opened)
-  {
-    // we can't save a database that hasn't been opened
-    return false;
-  }
+	if (!opened)
+	{
+		// we can't save a database that hasn't been opened
+		return false;
+	}
 
-  ofstream out(filename);
+	ofstream out(filename);
 
-  out << getHeader() << endl;
+	out << getHeader() << endl;
 
-  // TODO: iterate the HashTable to write
-  // in the same order
-  for (auto const &record : records)
-  {
-    record->toStream(&out);
-  }
+	// TODO: iterate the HashTable to write
+	// in the same order
+	for (auto const &record : records)
+	{
+		record->toStream(&out);
+	}
 
-  out.close();
+	out.close();
 
-  return true;
+	return true;
 }
 
 template <class T>
 T *Database<T>::primarySearch(T *search)
 {
-  T *ret = nullptr;
+	T *ret = nullptr;
 
-  if (hashmap.search(ret, search))
-  {
-    return ret;
-  };
+	if (hashmap.search(ret, search))
+	{
+		return ret;
+	};
 
-  return nullptr;
+	return nullptr;
 }
 
 template <class T>
 bool Database<T>::secondarySearch(T *search, std::vector<T *> &ret)
 {
-  return bst.search(search, &ret);
+	return bst.search(search, &ret);
 }
+
+template <class T>
+bool Database<T>::insert(T& item)
+{
+	return hashmap.insert(item) && bst.insert(item);
+}
+
+template <class T>
+bool Database<T>::remove(T &itemOut, const T key)
+{
+	bool success = false;
+	success = bst.remove(key);
+	success = success && hashmap.remove(itemOut, key);
+
+	return success;
+}
+
+template <class T>
+bool Database<T>::displayData(void visit(T &))
+{
+	for(int i = 0; i < records.size(); i++)
+	{
+		visit(records[i]);
+	}
+}
+
 #endif
