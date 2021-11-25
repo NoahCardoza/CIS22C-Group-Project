@@ -113,11 +113,14 @@ bool BinarySearchTree<T>::_search(BinaryNode<T> *nodePtr, const T target, std::v
 		}
 		else
 		{
-			returnedItem->push_back(nodePtr->getItem());
-			if (nodePtr->getRightPtr() != nullptr && (nodePtr->getRightPtr()->getItem()) == target) // if right node is not null and equal target
+			BinaryNode<T> *cur = nodePtr;
+
+			while (cur && *(cur->getItem()) == *(target))
 			{
-				return _search(nodePtr->getRightPtr(), target, returnedItem);
+				returnedItem->push_back(cur->getItem());
+				cur = cur->getRightPtr();
 			}
+
 			return true;
 		}
 	}
