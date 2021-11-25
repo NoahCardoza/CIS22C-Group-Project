@@ -8,6 +8,9 @@
 #include <algorithm>
 #include <vector>
 
+#include "BinarySearchTree.h"
+#include "HashTable.h"
+
 using namespace std;
 
 using std::string;
@@ -20,12 +23,16 @@ class Database
 {
 private:
   bool opened = false;
+  BinarySearchTree<T *> bst;
+  HashTable<T> hashmap;
   vector<T *> records;
   virtual string getHeader() = 0;
 
 public:
   bool open(string filename);
   bool save(string filename);
+  T *primarySearch(T *search);
+  bool secondarySearch(T *search, std::vector<T *> &ret);
 
   /**
    * Empties the vector holding the
@@ -78,6 +85,8 @@ bool Database<T>::open(string filename)
   {
     if (record->fromStream(&in))
     {
+      bst.insert(record);
+      hashmap.insert(record);
       records.push_back(record);
       record = new T();
     }
@@ -123,4 +132,22 @@ bool Database<T>::save(string filename)
   return true;
 }
 
+template <class T>
+T *Database<T>::primarySearch(T *search)
+{
+  T *ret = nullptr;
+
+  if (hashmap.search(ret, search))
+  {
+    return ret;
+  };
+
+  return nullptr;
+}
+
+template <class T>
+bool Database<T>::secondarySearch(T *search, std::vector<T *> &ret)
+{
+  return bst.search(search, &ret);
+}
 #endif

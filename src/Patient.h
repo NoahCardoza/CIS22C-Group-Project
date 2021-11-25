@@ -14,8 +14,8 @@ class Patient
 {
 private:
   // columns
-  string id;
-  string name;
+  string id;   // primary key
+  string name; // secondary key
   int checkin;
   int checkout;
   char status;
@@ -36,10 +36,33 @@ public:
     gender = 0;
   }
 
+  Patient(string id, string name)
+  {
+    this->id = id;
+    this->name = name;
+    checkin = -1;
+    checkout = -1;
+    status = 0;
+    age = -1;
+    country = "";
+    gender = 0;
+  }
+
+  Patient(string id, string name, int checkin, int checkout, int status, int age, string country, int gender)
+  {
+    this->id = id;
+    this->name = name;
+    this->checkin = checkin;
+    this->checkout = checkout;
+    this->status = status;
+    this->age = age;
+    this->country = country;
+    this->gender = gender;
+  }
+
   bool fromStream(std::ifstream *in);
   void toStream(std::ostream *out);
-  int hash(int);
-  void print(void);
+  void print(void) const;
 
   // getters
   void setId(string id) { this->id = id; }
@@ -52,19 +75,20 @@ public:
   void setGender(char gender) { this->gender = gender; }
 
   // setters
-  string getId() { return id; }
-  string getName() { return name; }
-  int getCheckin() { return checkin; }
-  int getCheckout() { return checkout; }
-  char getStatus() { return status; }
-  int getAge() { return age; }
-  string getCountry() { return country; }
-  char getGender() { return gender; }
+  string getId() const { return id; }
+  string getName() const { return name; }
+  int getCheckin() const { return checkin; }
+  int getCheckout() const { return checkout; }
+  char getStatus() const { return status; }
+  int getAge() const { return age; }
+  string getCountry() const { return country; }
+  char getGender() const { return gender; }
 
   // overloaded operators
-  bool operator==(const Patient &p);
-  bool operator<(const Patient &p);
-  bool operator>(const Patient &p);
+  bool operator==(const Patient &p) const;
+  bool operator!=(const Patient &p) const;
+  bool operator<(const Patient &p) const;
+  bool operator>(const Patient &p) const;
 };
 
 #endif

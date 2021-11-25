@@ -8,12 +8,6 @@
 
 using namespace std;
 
-int Patient::hash(int size)
-{
-  // TODO: implement this function
-  return size;
-}
-
 bool Patient::fromStream(ifstream *in)
 {
   // if nothing is read in for the id
@@ -47,10 +41,10 @@ void Patient::toStream(ostream *out)
 /**
  * Print out all the properties of the
  * class.
- * 
+ *
  * TODO: remove in final version.
  */
-void Patient::print(void)
+void Patient::print(void) const
 {
   cout << "ID: " << id << endl;
   cout << "Name: " << name << endl;
@@ -65,17 +59,22 @@ void Patient::print(void)
  * Overloaded Operators
  */
 
-bool Patient::operator==(const Patient &p)
+bool Patient::operator==(const Patient &p) const
 {
-  return name == p.name;
+  return name == p.name || id == p.id;
 }
 
-bool Patient::operator<(const Patient &p)
+bool Patient::operator!=(const Patient &p) const
+{
+  return name != p.name && id != p.id;
+}
+
+bool Patient::operator<(const Patient &p) const
 {
   return name < p.name;
 }
 
-bool Patient::operator>(const Patient &p)
+bool Patient::operator>(const Patient &p) const
 {
   return name > p.name;
 }

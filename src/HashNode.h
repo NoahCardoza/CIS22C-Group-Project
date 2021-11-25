@@ -13,38 +13,27 @@ class HashNode
 {
 private:
     T *ptrItem;
-    HashNode *next;
-    int collisions;
+    HashNode<T> *next;
 
 public:
     //constructors
     HashNode()
     {
-        next = NULL;
-        collisions = 0;
+        next = nullptr;
     }
-    HashNode(T *pItem)
+
+    HashNode(T *pItem, HashNode<T> *next = nullptr)
     {
         ptrItem = pItem;
-        next = NULL;
-        collisions = 0;
-    }
-    HashNode(T *pItem, HashNode *nextPtr, int col)
-    {
-        ptrItem = pItem;
-        nextPtr = NULL;
-        collisions = col;
     }
 
     //setters
-    void setItem(const T *pItem) { ptrItem = pItem; }
-    void setNext(HashNode *nextPtr) { next = nextPtr; }
-    void setCollisions(int col) { collisions = col; }
+    void setItem(T *pItem) { ptrItem = pItem; }
+    void setNext(HashNode<T> *nextPtr) { next = nextPtr; }
 
     //getters
     T *getItem() const { return ptrItem; }
-    HashNode *getNext() const { return next; }
-    int getCollisions() const { return collisions; }
+    HashNode<T> *getNext() const { return next; }
 };
 
 #endif /* HashNode_h */

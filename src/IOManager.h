@@ -9,69 +9,178 @@
 #include "HashTable.h"
 #include "BinarySearchTree.h"
 #include "Patient.h"
-#include "Database.h"
+#include "PatientDatabase.h"
 
 class IOManager
 {
-	public:
-		/**
-		 * collects the input from the user and creates a new patient
-		 */
-		void createData();
+public:
+	/**
+	 * collects the input from the user and creates a new patient
+	 */
+	void createData();
 
-		/**
-		 * collects the input from the user and deletes a patient
-		 */
-		void deleteData();
+	/**
+	 * collects the input from the user and deletes a patient
+	 */
+	void deleteData();
 
-		/**
-		 * undoes a delete if a user has recently deletedData (gets information from deletedStack)
-		 */
-		void undoDelete();
+	/**
+	 * undoes a delete if a user has recently deletedData (gets information from deletedStack)
+	 */
+	void undoDelete();
 
-		/**
-		 * Collects input from the user, then finds the specified patient using it's primary key
-		 */
-		void findDataWithPrimaryKey();
+	/**
+	 * Collects input from the user, then finds the specified patient using it's primary key
+	 */
+	void findDataWithPrimaryKey();
 
-		/**
-		 * collects the input from the user then finds the specified patients using their secondary key
-		 */
-		void findDataWithSecondaryKey();
+	/**
+	 * collects the input from the user then finds the specified patients using their secondary key
+	 */
+	void findDataWithSecondaryKey();
 
-		/**
-		 * displays all the current data
-		 */
-		void display();
+	/**
+	 * displays all the current data
+	 */
+	void displayData();
 
-		/**
-		 * starts the main loop which displays the menu and collects the users input, then calls the appropriate function to handle the rest
-		 */
-		void startMainLoop();
+	/**
+	 * starts the main loop which displays the menu and collects the users input, then calls the appropriate function to handle the rest
+	 */
+	void startMainLoop();
 
-		/**
-		 * creates a new IO manager object with the hashtable DB and the BST DB
-		 */
-		IOManager(HashTable<Patient>&, BinarySearchTree<Patient>&);
+	/**
+	 * saves data to the save file
+	 */
+	void saveToFile();
 
-	private:
-		/**
-		 * hashtable DB to store the patients
-		 */
-		HashTable<Patient> hashtableDB;
+	/**
+	* creates a new IO manager object with the hashtable DB and the BST DB
+	*/
+	IOManager();
 
-		/**
-		 * BST DB to store the patients.
-		 */
-		BinarySearchTree<Patient> bstDB;
+private:
+	PatientDatabase database;
 
-		Database<Patient> database;
-
-		/**
-		 * stack used for the undoDelete() method.
-		 * whenever a patient is deleted, it will be pushed onto this stack.
-		 * Whenever the user saves everything to a file, this stack gets refreshed.
-		 */
-		std::stack<Patient> deletedStack;
-
+	/**
+	 * stack used for the undoDelete() method.
+	 * whenever a patient is deleted, it will be pushed onto this stack.
+	 * Whenever the user saves everything to a file, this stack gets refreshed.
+	 */
+	std::stack<Patient> deletedStack;
 };
+
+IOManager::IOManager()
+{
+	// TODO: probably move this to the main loop,
+	// or another init method which asks the user
+	// which file to open maybe even accept argv
+	// for funzies and quicker testing?
+
+	this->database.open("../data/small.csv");
+}
+
+void IOManager::startMainLoop()
+{
+	while (true)
+	{
+		std::cout << "Choose an option from the menu" << std::endl;
+		std::cout << "\t1. Add Patient" << std::endl;
+		std::cout << "\t2. Delete Patient" << std::endl;
+		std::cout << "\t3. Undo Delete Of Patient" << std::endl;
+		std::cout << "\t4. Find Patient with Primary Key" << std::endl;
+		std::cout << "\t5. Find Patient with Secondary Key" << std::endl;
+		std::cout << "\t6. Display All Data" << std::endl;
+		std::cout << "\t7. Save to file" << std::endl;
+		std::cout << "\t8. Exit\n"
+							<< std::endl;
+
+		int studentOption;
+		cin >> studentOption;
+
+		if (studentOption < 1 || studentOption > 8)
+		{
+			std::cout << "Please choose one of the options above" << std::endl;
+			continue;
+		}
+
+		switch (studentOption)
+		{
+		case 1:
+			createData();
+			break;
+		case 2:
+			deleteData();
+			break;
+		case 3:
+			undoDelete();
+			break;
+		case 4:
+			findDataWithPrimaryKey();
+			break;
+		case 5:
+			findDataWithSecondaryKey();
+			break;
+		case 6:
+			displayData();
+			break;
+		case 7:
+			saveToFile();
+			break;
+		case 8:
+			std::cout << "Exiting..." << std::endl;
+			return;
+		}
+	}
+}
+
+void IOManager::findDataWithPrimaryKey()
+{
+	std::string primaryKey;
+	std::cout << "Enter the primary key: ";
+	std::cin >> primaryKey;
+
+	Patient myPatient = Patient(primaryKey, "");
+	Patient *patient = database.primarySearch(&myPatient);
+
+	if (patient == nullptr)
+	{
+		std::cout << "No patient found with that primary key" << std::endl;
+		return;
+	}
+
+	std::cout << "Patient found:" << std::endl;
+	patient->toStream(&std::cout);
+}
+
+void IOManager::findDataWithSecondaryKey()
+{
+	std::string secondaryKey;
+	std::cout << "Enter the secondary key: ";
+	std::cin >> secondaryKey;
+
+	Patient myPatient = Patient("", secondaryKey);
+	std::vector<Patient *> patients;
+
+	if (database.secondarySearch(&myPatient, patients))
+	{
+		std::cout << "No patient found with that secondary key" << std::endl;
+		return;
+	}
+
+	std::cout << "Patient(s) found:" << std::endl;
+
+	for (auto const &patient : patients)
+	{
+		patient->toStream(&std::cout);
+	}
+}
+
+void IOManager::saveToFile()
+{
+	std::string fileName;
+	std::cout << "Enter the file name: ";
+	std::cin >> fileName;
+
+	database.save(fileName); //todo add err handling
+}
