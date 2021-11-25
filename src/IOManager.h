@@ -80,12 +80,14 @@ IOManager::IOManager()
 	// or another init method which asks the user
 	// which file to open maybe even accept argv
 	// for funzies and quicker testing?
-
 	this->database.open("../data/small.csv");
+	deletedStack = new std::stack<Patient *>();
 }
 
 void IOManager::startMainLoop()
 {
+	int studentOption;
+
 	while (true)
 	{
 		std::cout << "Choose an option from the menu" << std::endl;
@@ -100,14 +102,7 @@ void IOManager::startMainLoop()
 		std::cout << "\t9. Exit\n"
 							<< std::endl;
 
-		int studentOption;
-		cin >> studentOption;
-
-		if (studentOption < 1 || studentOption > 8)
-		{
-			std::cout << "Please choose one of the options above" << std::endl;
-			continue;
-		}
+		std::cin >> studentOption;
 
 		switch (studentOption)
 		{
@@ -138,6 +133,8 @@ void IOManager::startMainLoop()
 		case 9:
 			std::cout << "Exiting..." << std::endl;
 			return;
+		default:
+			std::cout << "Please choose one of the options above" << std::endl;
 		}
 	}
 }
@@ -151,7 +148,7 @@ void IOManager::findDataWithPrimaryKey()
 	Patient *patient = nullptr;
 	Patient myPatient = Patient(primaryKey, "");
 
-	if (database.primarySearch(&myPatient, &patient))
+	if (!database.primarySearch(&myPatient, &patient))
 	{
 		std::cout << "No patient found with that primary key" << std::endl;
 		return;
@@ -165,12 +162,17 @@ void IOManager::findDataWithSecondaryKey()
 {
 	std::string secondaryKey;
 	std::cout << "Enter the secondary key: ";
-	std::cin >> secondaryKey;
+	std::cin.ignore();
+	std::getline(std::cin, secondaryKey);
+
+	cout << secondaryKey << endl;
 
 	Patient myPatient = Patient("", secondaryKey);
 	std::vector<Patient *> patients;
 
-	if (database.secondarySearch(&myPatient, patients))
+	myPatient.print();
+
+	if (!database.secondarySearch(&myPatient, patients))
 	{
 		std::cout << "No patient found with that secondary key" << std::endl;
 		return;
