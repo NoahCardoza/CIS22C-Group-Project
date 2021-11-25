@@ -29,12 +29,12 @@ public:
 
 	//Linked List Operations
 	int getLength() const { return length; }
-	void insertNode(T *dataIn);
-	bool deleteNode(const T *, T **);
+	void insertNode(T dataIn);
+	bool deleteNode(const T, T *);
 
 	void displayList() const;
-	bool searchList(const T *, T *) const;
-	T *pop();
+	bool searchList(const T, T) const;
+	T pop();
 };
 
 template <class T>
@@ -47,7 +47,7 @@ LinkedList<T>::LinkedList()
 
 //The insertNode function inserts a new node in a sorted linked list
 template <class T>
-void LinkedList<T>::insertNode(T *dataIn)
+void LinkedList<T>::insertNode(T dataIn)
 {
 	HashNode<T> *newNode; //A new node
 	HashNode<T> *pCur;		//To traverse the list
@@ -85,7 +85,7 @@ void LinkedList<T>::insertNode(T *dataIn)
 // deleted from the list and from memory.
 //**************************************************
 template <class T>
-bool LinkedList<T>::deleteNode(const T *target, T **itemOut)
+bool LinkedList<T>::deleteNode(const T target, T *itemOut)
 {
 	HashNode<T> *pCur; //to traverse the lsit
 	HashNode<T> *pPre; //to point to the previous node
@@ -133,9 +133,6 @@ void LinkedList<T>::displayList() const
 	while (pCur)
 	{
 		// Display the value in this node.
-
-		pCur->getItem()->print();
-		std::cout << std::endl;
 		pCur = pCur->getNext();
 	}
 }
@@ -146,7 +143,7 @@ void LinkedList<T>::displayList() const
 // and copies the data in that node to the output parameter
 //**************************************************
 template <class T>
-bool LinkedList<T>::searchList(const T *target, T *dataOut) const
+bool LinkedList<T>::searchList(const T target, T dataOut) const
 {
 	HashNode<T> *pCur; // To move through the list
 
@@ -197,7 +194,7 @@ LinkedList<T>::~LinkedList()
 }
 
 template <class T>
-T *LinkedList<T>::pop()
+T LinkedList<T>::pop()
 {
 	// TODO: implement this
 	return head->getItem();

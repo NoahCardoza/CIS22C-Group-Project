@@ -12,7 +12,7 @@ template <class T>
 class HashNode
 {
 private:
-    T *ptrItem;
+    T ptrItem;
     HashNode<T> *next;
 
 public:
@@ -22,17 +22,17 @@ public:
         next = nullptr;
     }
 
-    HashNode(T *pItem, HashNode<T> *next = nullptr)
+    HashNode(T pItem, HashNode<T> *next = nullptr)
     {
         ptrItem = pItem;
     }
 
     //setters
-    void setItem(T *pItem) { ptrItem = pItem; }
+    void setItem(T pItem) { ptrItem = pItem; }
     void setNext(HashNode<T> *nextPtr) { next = nextPtr; }
 
     //getters
-    T *getItem() const { return ptrItem; }
+    T getItem() const { return ptrItem; }
     HashNode<T> *getNext() const { return next; }
 };
 
