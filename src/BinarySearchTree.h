@@ -4,7 +4,7 @@
 
 #ifndef _BINARY_SEARCH_TREE
 #define _BINARY_SEARCH_TREE
-
+#include <vector>
 #include "BinaryTree.h"
 
 template<class T>
@@ -113,12 +113,12 @@ template<class T>
 BinaryNode<T>* BinarySearchTree<T>::_search(BinaryNode<T>* nodePtr,
     const T& target) const
 {
-    BinaryNode<T>* found = nullptr;
+    victor<BinaryNode<T>*> found = nullptr; // vector of BinaryNode<T>* to hold duplicate names objects. 
 
     if (nodePtr == nullptr) {
         return found;
     }
-
+ 
     if (nodePtr->getItem() > target) {
         return _search(nodePtr->getLeftPtr(), target);
     }
@@ -126,12 +126,11 @@ BinaryNode<T>* BinarySearchTree<T>::_search(BinaryNode<T>* nodePtr,
         if (nodePtr->getItem() < target) {
             return _search(nodePtr->getRightPtr(), target);
         }
-        else {
-            found = nodePtr;
+        else { 
+            found.push_back(nodePtr);
             return found;
         }
     }
-    
 }
 
 #endif
