@@ -13,7 +13,7 @@ public:
 	// insert a node at the correct location
 	bool insert(const T &item);
 	// remove a node if found
-	BinaryNode<T> *remove(const T &target);
+	T remove(const T target);
 	// find a target node
 	bool search(const T &target, std::vector<T> *returnedItem) const;
 	// find the smallest node
@@ -131,40 +131,61 @@ bool BinarySearchTree<T>::_search(BinaryNode<T> *nodePtr, const T target, std::v
 // - return true if target is found and deleted, otherwise
 // - returns false if the node is not found
 template <class T>
-BinaryNode<T> *BinarySearchTree<T>::remove(const T &target)
+T BinarySearchTree<T>::remove(const T target)
 {
 	BinaryNode<T> *parent = nullptr;
 	BinaryNode<T> *cur = this->rootPtr;
+	T ret;
 	while (cur != nullptr)
-	{ // Search for node
-		if (cur->getItem() == target)
-		{																																		 // Node found
-			if (cur->getLeftPtr() == nullptr && cur->getRightPtr() == nullptr) // Remove leaf node
+	{
+		if (*cur->getItem() < *target) // Search right
+		{
+			parent = cur;
+			cur = cur->getRightPtr();
+		}
+		else if (*cur->getItem() > *target)
+		{ // Search left
+			parent = cur;
+			cur = cur->getLeftPtr();
+		}
+		// TODO: maybe remove the call to getId and accept a callback cmp function? #ADTsAreAIDS
+		else if (*cur->getItem() == *target && cur->getItem()->getId() == target->getId()) // Node found
+		{
+			if (!cur->getLeftPtr() && !cur->getRightPtr()) // Remove leaf node
 			{
 				if (parent == nullptr) // Node is root
-					this->rootPtr == nullptr;
+					this->rootPtr = nullptr;
 				else if (parent->getLeftPtr() == cur)
-					parent->setLeftPtr() == nullptr;
+					parent->setLeftPtr(nullptr);
 				else
-					parent->setRightPtr() == nullptr;
+					parent->setRightPtr(nullptr);
+				ret = cur->getItem();
+				delete cur;
+				return ret;
 			}
-			else if (cur->getRightPtr() == nullptr) // Remove node with only left child
+			else if (!cur->getRightPtr()) // Remove node with only left child
 			{
 				if (parent == nullptr) // Node is root
 					this->rootPtr = cur->getLeftPtr();
 				else if (parent->getLeftPtr() == cur)
-					parent->setLeftPtr() = cur->getLeftPtr();
+					parent->setLeftPtr(cur->getLeftPtr());
 				else
-					parent->setRightPtr() = cur->getLeftPtr();
+					parent->setRightPtr(cur->getLeftPtr());
+				ret = cur->getItem();
+				delete cur;
+				return ret;
 			}
-			else if (cur->getLeftPtr() == nullptr) // Remove node with only right child
+			else if (!cur->getLeftPtr()) // Remove node with only right child
 			{
 				if (parent == nullptr) // Node is root
 					this->rootPtr = cur->getRightPtr();
 				else if (parent->getLeftPtr() == cur)
-					parent->setLeftPtr() = cur->getLeftPtr();
+					parent->setLeftPtr(cur->getLeftPtr());
 				else
-					parent->setRightPtr() = cur->getRightPtr();
+					parent->setRightPtr(cur->getRightPtr());
+				ret = cur->getItem();
+				delete cur;
+				return ret;
 			}
 			else // Remove node with two children
 			{
@@ -174,24 +195,21 @@ BinaryNode<T> *BinarySearchTree<T>::remove(const T &target)
 				{
 					suc = suc->getLeftPtr();
 				}
-				T successorDataCopy = suc->getItem();		//  Create copy of suc's data
-				_remove(this->rootPtr, suc->getItem()); // Remove successor
-				cur->setItem() = successorDataCopy;			//  Assign cur's data with successorData
+				T successorDataCopy = suc->getItem(); // Create copy of suc's data
+				remove(suc->getItem());								// Remove successor
+				cur->setItem(successorDataCopy);			// Assign cur's data with successorData
+				ret = suc->getItem();
+				delete suc;
+				return ret; // Node found and removed
 			}
-			return true; // Node found and removed
 		}
-		else if (cur->getItem() < target) // Search right
+		else
 		{
 			parent = cur;
 			cur = cur->getRightPtr();
 		}
-		else
-		{ // Search left
-			parent = cur;
-			cur = cur->getLeftPtr();
-		}
 	}
-	return false; // Node not found
+	return nullptr; // Node not found
 }
 
 #endif
