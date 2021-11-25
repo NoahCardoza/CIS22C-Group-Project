@@ -19,7 +19,7 @@ private:
     int hashSize;
     int count;
     int collisionCount;
-    int hash(const T key);
+    int hash(const T *key);
 
 public:
     HashTable()
@@ -52,14 +52,14 @@ public:
     int newSize();
     void rehash();
     bool isPrime(int);
-    bool getListItem(T *dataOut);
+    bool getListItem(T **dataOut);
 };
 
 /*~*~*~*
    Hash function: using pseudorandom generation
 *~**/
 template <class T>
-int HashTable<T>::hash(const T key)
+int HashTable<T>::hash(const T *key)
 {
     std::string pkey = key->getId();
     int sum = 0;
@@ -75,7 +75,7 @@ int HashTable<T>::hash(const T key)
    It rejects duplicates
 *~**/
 template <class T>
-bool HashTable<T>::insert(T itemIn)
+bool HashTable<T>::insert(T *itemIn)
 {
     LinkedList<T> *home = hashAry + hash(itemIn);
 
@@ -230,7 +230,7 @@ void HashTable<T>::rehash()
 
     hashSize = newSize();
     hashAry = new LinkedList<T>[hashSize];
-    T itemOut;
+    T *itemOut;
     count = 0;
     for (int i = 0; i < oldSize; i++)
     {

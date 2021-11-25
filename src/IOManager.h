@@ -71,7 +71,7 @@ private:
 	 * whenever a patient is deleted, it will be pushed onto this stack.
 	 * Whenever the user saves everything to a file, this stack gets refreshed.
 	 */
-	std::stack<Patient>* deletedStack;
+	std::stack<Patient *> *deletedStack;
 };
 
 IOManager::IOManager()
@@ -98,7 +98,7 @@ void IOManager::startMainLoop()
 		std::cout << "\t7. Save to file" << std::endl;
 		std::cout << "\t8. Load from file" << std::endl;
 		std::cout << "\t9. Exit\n"
-				  << std::endl;
+							<< std::endl;
 
 		int studentOption;
 		cin >> studentOption;
@@ -148,10 +148,10 @@ void IOManager::findDataWithPrimaryKey()
 	std::cout << "Enter the primary key: ";
 	std::cin >> primaryKey;
 
+	Patient *patient = nullptr;
 	Patient myPatient = Patient(primaryKey, "");
-	Patient *patient = database.primarySearch(&myPatient);
 
-	if (patient == nullptr)
+	if (database.primarySearch(&myPatient, &patient))
 	{
 		std::cout << "No patient found with that primary key" << std::endl;
 		return;
@@ -218,9 +218,9 @@ void IOManager::loadFromFile()
 	}
 }
 
-void visitPatient(Patient& patient)
+void visitPatient(Patient *patient)
 {
-	patient.toStream(&std::cout);
+	patient->toStream(&std::cout);
 }
 
 void IOManager::displayData()
@@ -257,8 +257,8 @@ void IOManager::createData()
 	std::cout << "Enter a patient gender (M, F, O): " << std::endl;
 	std::cin >> gender;
 
-	Patient* myPatient = new Patient(id, name, checkin, checkout, status, age, country, gender);
-	if(database.insert(*myPatient))
+	Patient *myPatient = new Patient(id, name, checkin, checkout, status, age, country, gender);
+	if (database.insert(myPatient))
 	{
 		std::cout << "Successfully entered patient to database!" << std::endl;
 	}
@@ -276,13 +276,13 @@ void IOManager::deleteData()
 	std::cin >> id;
 
 	Patient patientKey = Patient(id, "");
-	Patient itemOut;
+	Patient *itemOut;
 
-	if(database.remove(itemOut, patientKey))
+	if (database.remove(&patientKey, &itemOut))
 	{
 		std::cout << "Successfully deleted patient from database!" << std::endl;
 		delete deletedStack;
-		deletedStack = new std::stack<Patient>();
+		deletedStack = new std::stack<Patient *>();
 	}
 	else
 	{
@@ -294,16 +294,16 @@ void IOManager::deleteData()
 
 void IOManager::undoDelete()
 {
-	if(deletedStack->empty())
+	if (deletedStack->empty())
 	{
 		std::cout << "No deleted items to undo" << std::endl;
 		return;
 	}
 
-	Patient itemOut = deletedStack->top();
+	Patient *itemOut = deletedStack->top();
 	deletedStack->pop();
 
-	if(database.insert(itemOut))
+	if (database.insert(itemOut))
 	{
 		std::cout << "Successfully undeleted patient from database!" << std::endl;
 	}
