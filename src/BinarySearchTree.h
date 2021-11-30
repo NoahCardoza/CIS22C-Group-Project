@@ -11,7 +11,7 @@ class BinarySearchTree : public BinaryTree<T>
 {
 public:
 	bool insert(const T &item);																				// insert a node at the correct location
-	T remove(const T target, BinaryNode<T> *rootPtr);																					// remove a node if found
+	T remove(const T target);																					// remove a node if found
 	bool search(const T &target, std::vector<T> *returnedItem) const; // find a target node
 private:
 	BinaryNode<T> *_insert(BinaryNode<T> *nodePtr, BinaryNode<T> *newNode);										// internal insert node: insert newNode in nodePtr subtree
@@ -108,7 +108,7 @@ bool BinarySearchTree<T>::_search(BinaryNode<T> *nodePtr, const T target, std::v
 // - return true if target is found and deleted, otherwise
 // - returns false if the node is not found
 template <class T>
-T BinarySearchTree<T>::remove(const T target, BinaryNode<T> *rootPtr)
+T BinarySearchTree<T>::remove(const T target)
 {
 	BinaryNode<T> *parent = nullptr;
 	BinaryNode<T> *cur = this->rootPtr;
