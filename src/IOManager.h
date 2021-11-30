@@ -206,13 +206,19 @@ void IOManager::saveToFile()
 void IOManager::loadFromFile()
 {
 	std::string fileName;
+
+	if (database.isOpen())
+	{
+		database.close();
+	}
+
 	std::cout << "Enter the file name: ";
 	std::cin >> fileName;
 
 	if (database.open(fileName))
 	{
 		std::cout << "Successfully loaded from file" << std::endl;
-		delete &deletedStack;
+		// delete deletedStack;
 	}
 	else
 	{

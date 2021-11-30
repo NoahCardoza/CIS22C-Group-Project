@@ -24,13 +24,15 @@ class Database
 {
 private:
   bool opened = false;
-  BinarySearchTree<T *> bst;
-  HashTable<T> hashmap;
+  BinarySearchTree<T *> *bst;
+  HashTable<T> *hashmap;
   vector<T *> records;
   virtual string getHeader() = 0;
 
 public:
+  bool isOpen() { return opened; };
   bool open(string filename);
+  bool close();
   bool save(string filename);
   bool primarySearch(T *search, T **result);
   bool secondarySearch(T *search, std::vector<T *> &ret);
@@ -89,17 +91,59 @@ bool Database<T>::open(string filename)
   {
     if (record->fromStream(&in))
     {
-      bst.insert(record);
-      hashmap.insert(record);
       records.push_back(record);
       record = new T();
     }
   }
 
+  in.close();
+
   // delete the left over empty record
   delete record;
 
+  bst = new BinarySearchTree<T *>();
+  hashmap = new HashTable<T>(HashTable<T>::calculateHashSize(records.size()));
+
+  for (auto record : records)
+  {
+    bst->insert(record);
+    hashmap->insert(record);
+  }
+
   opened = true;
+
+  return true;
+}
+
+/**
+ * Close the database freeing all the
+ * pointers ready to close the program
+ * or open another file.
+ * 
+ * Don't forget to save!
+ *
+ * Returns success code.
+ */
+template <class T>
+bool Database<T>::close()
+{
+  if (!opened)
+  {
+    // you can't close and unopened db
+    return false;
+  }
+
+  for (auto record : records)
+  {
+    delete record;
+  }
+
+  records.clear();
+
+  delete bst;
+  delete hashmap;
+
+  opened = false;
 
   return true;
 }
@@ -139,27 +183,27 @@ bool Database<T>::save(string filename)
 template <class T>
 bool Database<T>::primarySearch(T *search, T **result)
 {
-  return hashmap.search(search, result);
+  return hashmap->search(search, result);
 }
 
 template <class T>
 bool Database<T>::secondarySearch(T *search, std::vector<T *> &ret)
 {
-  return bst.search(search, &ret);
+  return bst->search(search, &ret);
 }
 
 template <class T>
 bool Database<T>::insert(T *item)
 {
-  return hashmap.insert(item) && bst.insert(item);
+  return hashmap->insert(item) && bst->insert(item);
 }
 
 template <class T>
 bool Database<T>::remove(T *query, T **result)
 {
-  if (hashmap.remove(query, result))
+  if (hashmap->remove(query, result))
   {
-    if (bst.remove(*result))
+    if (bst->remove(*result))
     {
       return true;
     }

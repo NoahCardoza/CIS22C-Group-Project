@@ -49,10 +49,12 @@ public:
     bool insert(T *itemIn);
     bool remove(const T *key, T **itemOut);
     bool search(const T *key, T **itemOut);
-    int newSize();
     void rehash();
-    bool isPrime(int);
+
     bool getListItem(T **dataOut);
+
+    static int calculateHashSize(int);
+    static bool isPrime(int);
 };
 
 /*~*~*~*
@@ -180,27 +182,23 @@ void HashTable<T>::displayStatistics()
 }
 
 /*~*~*~*
-   newSize()returns the next prime number of 2 * hashSize to determine the hashSize for the new hash table.
+   calculateHashSize() returns the next prime number of 2 * hashSize to determine the hashSize for the new hash table.
 *~**/
 template <class T>
-int HashTable<T>::newSize()
+int HashTable<T>::calculateHashSize(int n)
 {
-    int number;
-    number = hashSize * 2;
-    if (number <= 1)
+    n = n * 2;
+
+    if (n <= 1)
         return 2;
 
-    int prime = number;
-    bool found = false;
-
     // Loop continuously until isPrime returns
-    while (!found)
+    while (1)
     {
-        prime++;
-        if (isPrime(prime))
-            found = true;
+        n++;
+        if (isPrime(n))
+            return n;
     }
-    return prime;
 }
 
 /*~*~*~*
@@ -227,7 +225,7 @@ void HashTable<T>::rehash()
     int oldSize = hashSize;
     LinkedList<T> *oldAry = hashAry;
 
-    hashSize = newSize();
+    hashSize = calculateHashSize(hashSize);
     hashAry = new LinkedList<T>[hashSize];
 
     count = 0;
