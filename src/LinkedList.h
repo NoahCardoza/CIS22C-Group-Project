@@ -179,8 +179,16 @@ LinkedList<T>::~LinkedList()
 template <class T>
 T *LinkedList<T>::pop()
 {
-	// TODO: implement this
-	return head->getItem();
+	HashNode<T *> *next;
+	T *item;
+
+	next = head->getNext();
+	item = next->getItem();
+	head->setNext(next->getNext());
+	length--;
+
+	delete next;
+	return item;
 }
 
 #endif /* LinkedList_h */

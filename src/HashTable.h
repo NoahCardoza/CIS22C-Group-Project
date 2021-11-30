@@ -79,14 +79,14 @@ bool HashTable<T>::insert(T *itemIn)
 {
     LinkedList<T> *home = hashAry + hash(itemIn);
 
-    T **dummy = nullptr;
+    T *dummy = nullptr;
 
     if (!home->getLength())
     {
         count++;
         collisionCount--;
     }
-    else if (home->searchList(itemIn, dummy))
+    else if (home->searchList(itemIn, &dummy))
     {
         return false;
     }
@@ -224,20 +224,18 @@ bool HashTable<T>::isPrime(int n)
 template <class T>
 void HashTable<T>::rehash()
 {
-    std::cout << "Rehashing the hash table" << std::endl;
     int oldSize = hashSize;
     LinkedList<T> *oldAry = hashAry;
 
     hashSize = newSize();
     hashAry = new LinkedList<T>[hashSize];
-    T *itemOut;
+
     count = 0;
     for (int i = 0; i < oldSize; i++)
     {
-        while (oldAry[i].getLength() != 0)
+        while (oldAry[i].getLength() > 0)
         {
-            itemOut = oldAry[i].pop(); //STACK
-            insert(itemOut);
+            insert(oldAry[i].pop());
         }
     }
     delete[] oldAry;
