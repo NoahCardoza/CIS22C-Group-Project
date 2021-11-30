@@ -7,9 +7,23 @@
 
 void populate_tree(BinarySearchTree<Patient *> &tree);
 
+template <class T>
+class BinarySearchTreeTester : public BinarySearchTree<T>
+{
+public:
+  void test_deleteing_root_node()
+  {
+    Patient query("frodo-1", "Frodo Baggins");
+    Patient *result;
+    result = this->remove(&query);
+
+    assert(result->getId() == "frodo-1");
+  }
+};
+
 int main(void)
 {
-  BinarySearchTree<Patient *> bst;
+  BinarySearchTreeTester<Patient *> bst;
   Patient query;
   Patient *result;
   vector<Patient *> patients;
@@ -35,6 +49,18 @@ int main(void)
   patients.clear();                                   // clear the vector
   delete result;                                      // free the memory
 
+  bst.test_deleteing_root_node();
+
+  // confirm left side of the rotated node are still accessable after deleteing root
+  query.setName("George");               // an id is required to delete a specific node from the bst
+  assert(bst.search(&query, &patients)); // confirm matches were found
+  assert(patients.size() == 1);          // confim the record was deleted
+  patients.clear();                      // clear the vector
+  query.setName("Hector");               // an id is required to delete a specific node from the bst
+  assert(bst.search(&query, &patients)); // confirm matches were found
+  assert(patients.size() == 1);          // confim the record was deleted
+  patients.clear();                      // clear the vector
+
   return 0;
 }
 
@@ -48,4 +74,6 @@ void populate_tree(BinarySearchTree<Patient *> &tree)
   tree.insert(new Patient("christian-1", "Christian Singh"));
   tree.insert(new Patient("christian-2", "Christian Singh"));
   tree.insert(new Patient("christian-3", "Christian Singh"));
+  tree.insert(new Patient("george-1", "George"));
+  tree.insert(new Patient("hector-1", "Hector"));
 }
