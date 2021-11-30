@@ -131,7 +131,9 @@ T BinarySearchTree<T>::remove(const T target, BinaryNode<T> *rootPtr)
 			if (!cur->getLeftPtr() && !cur->getRightPtr()) // Remove leaf node
 			{
 				if (parent == nullptr) // Node is root
+				{
 					this->rootPtr = nullptr;
+				}
 				else if (parent->getLeftPtr() == cur)
 					parent->setLeftPtr(nullptr);
 				else
@@ -143,11 +145,17 @@ T BinarySearchTree<T>::remove(const T target, BinaryNode<T> *rootPtr)
 			else if (!cur->getRightPtr()) // Remove node with only left child
 			{
 				if (parent == nullptr) // Node is root
+				{
 					this->rootPtr = cur->getLeftPtr();
+				}
 				else if (parent->getLeftPtr() == cur)
+				{
 					parent->setLeftPtr(cur->getLeftPtr());
+				}
 				else
+				{
 					parent->setRightPtr(cur->getLeftPtr());
+				}
 				ret = cur->getItem();
 				delete cur;
 				return ret;
@@ -168,16 +176,32 @@ T BinarySearchTree<T>::remove(const T target, BinaryNode<T> *rootPtr)
 			{
 				// Find successor (leftmost child of right subtree)
 				BinaryNode<T> *suc = cur->getRightPtr();
+				BinaryNode<T> *sucParent = suc;
 				while (suc->getLeftPtr() != nullptr)
 				{
+					sucParent = suc;
 					suc = suc->getLeftPtr();
 				}
-				T successorDataCopy = suc->getItem(); // Create copy of suc's data
-				remove(suc->getItem());								// Remove successor
-				cur->setItem(successorDataCopy);			// Assign cur's data with successorData
-				ret = suc->getItem();
-				delete suc;
-				return ret; // Node found and removed
+				sucParent->setLeftPtr(suc->getRightPtr());
+				suc->setLeftPtr(cur->getLeftPtr());
+
+				if (parent == nullptr) // Node is root
+				{
+					this->rootPtr = suc;
+				}
+				else if (parent->getLeftPtr() == cur)
+				{
+					parent->setLeftPtr(suc);
+				}
+				else
+				{
+					parent->setRightPtr(suc);
+				}
+
+				ret = cur->getItem();
+				delete cur;
+
+				return ret;
 			}
 		}
 		else
