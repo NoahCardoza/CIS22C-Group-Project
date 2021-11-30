@@ -2,8 +2,8 @@
 #include <vector>
 #include <assert.h>
 
-#include "../src/BinarySearchTree.h"
-#include "../src/Patient.h"
+#include "../../src/BinarySearchTree.h"
+#include "../../src/Patient.h"
 
 void populate_tree(BinarySearchTree<Patient *> &tree);
 

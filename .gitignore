@@ -1,8 +1,11 @@
 # MacOS
 .DS_Store
 
-# Debugging
+# Testing
+*.test
 
+
+# Debugging
 a.out.dSYM/
 cmake-build-debug/
 CMakeLists.txt

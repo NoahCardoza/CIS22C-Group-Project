@@ -1,8 +1,8 @@
 #include <string>
 #include <assert.h>
 
-#include "../src/HashTable.h"
-#include "../src/Patient.h"
+#include "../../src/HashTable.h"
+#include "../../src/Patient.h"
 
 void test_insert(HashTable<Patient> &ht);
 void test_synonyms(HashTable<Patient> &ht);
