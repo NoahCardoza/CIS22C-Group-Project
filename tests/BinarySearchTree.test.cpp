@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 #include <assert.h>
 
 #include "../src/BinarySearchTree.h"
@@ -10,58 +11,41 @@ int main(void)
 {
   BinarySearchTree<Patient *> bst;
   Patient query;
-  Patient *result = nullptr;
+  Patient *result;
+  vector<Patient *> patients;
 
   populate_tree(bst);
 
-  // create out query instance
-  query.setName("Samwise Gamgee");
+  query.setName("Samwise Gamgee");       // create out query instance
+  assert(bst.search(&query, &patients)); // confirm a match was found
+  assert(patients.size() == 3);          // confim all matches were found
+  patients.clear();                      // clear the vector
 
-  // confirm a match was found
-  assert(bst.search(&query, result));
+  query.setName("Christian Singh");      // search for a name we've had problems with
+  assert(bst.search(&query, &patients)); // confirm matches were found
+  assert(patients.size() == 3);          // confim all matches were found
+  patients.clear();                      // clear the vector
 
-  // confirm the result pointer was set
-  assert(result);
-
-  // confim the right record was returned
-  assert(result->getAge() == 20);
-
-  // test that we infact are dealing with a pointer
-  result->setAge(23);
-  result = nullptr;
-
-  assert(bst.search(&query, result));
-  assert(result);
-
-  // make sure the ealier changes actually mutated the instance
-  assert(result->getAge() == 23);
-
-  // TODO: test delete
-  // TODO: test other required functions
-  // TODO: free memory
+  query.setId("christian-2");                         // an id is required to delete a specific node from the bst
+  result = bst.remove(&query);                        // remove the matching element and return it
+  assert(result && result->getId() == "christian-2"); // make sure the correct item was returned
+  query.setId("");                                    // unset the id; we don't need it
+  assert(bst.search(&query, &patients));              // confirm matches were found
+  assert(patients.size() == 2);                       // confim the record was deleted
+  patients.clear();                                   // clear the vector
+  delete result;                                      // free the memory
 
   return 0;
 }
 
 void populate_tree(BinarySearchTree<Patient *> &tree)
 {
-  Patient *record;
-
-  record = new Patient();
-  record->setName("Frodo Baggins");
-  record->setAge(21);
-
-  tree.insert(record);
-
-  record = new Patient();
-  record->setName("Alfrid Lickspittle");
-  record->setAge(31);
-
-  tree.insert(record);
-
-  record = new Patient();
-  record->setName("Samwise Gamgee");
-  record->setAge(20);
-
-  tree.insert(record);
+  tree.insert(new Patient("frodo-1", "Frodo Baggins"));
+  tree.insert(new Patient("alfrid-1", "Alfrid Lickspittle"));
+  tree.insert(new Patient("samwise-1", "Samwise Gamgee"));
+  tree.insert(new Patient("samwise-2", "Samwise Gamgee"));
+  tree.insert(new Patient("samwise-3", "Samwise Gamgee"));
+  tree.insert(new Patient("christian-1", "Christian Singh"));
+  tree.insert(new Patient("christian-2", "Christian Singh"));
+  tree.insert(new Patient("christian-3", "Christian Singh"));
 }
