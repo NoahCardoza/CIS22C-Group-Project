@@ -22,7 +22,7 @@ public:
         next = nullptr;
     }
 
-    HashNode(T pItem, HashNode<T> *next = nullptr)
+    HashNode(T pItem)
     {
         ptrItem = pItem;
     }

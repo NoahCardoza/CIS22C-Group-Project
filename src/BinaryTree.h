@@ -21,7 +21,7 @@ public:
 		rootPtr = 0;
 		count = 0;
 	}
-	BinaryTree(const BinaryTree<T> &tree) {}
+
 	virtual ~BinaryTree() { destroyTree(rootPtr); }
 
 	// common functions for all binary trees

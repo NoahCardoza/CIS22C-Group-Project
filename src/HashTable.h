@@ -68,7 +68,7 @@ int HashTable<T>::hash(const T *key)
 {
     std::string pkey = key->getId();
     int sum = 0;
-    for (int i = 0; i < pkey.size(); i++)
+    for (int i = 0; i < (int)pkey.size(); i++)
     {
         sum += pkey[i];
     }
