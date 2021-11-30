@@ -215,9 +215,6 @@ bool Database<T>::remove(T *query, T **result)
 template <class T>
 void Database<T>::displayData(void visit(T *))
 {
-  for (auto record : records)
-  {
-    visit(record);
-  }
+  bst->inOrder(visit);
 }
 #endif
