@@ -43,8 +43,8 @@ class Database
 {
 private:
   bool opened = false;
-  BinarySearchTree<T *> *bst;
-  HashTable<T> *hashmap;
+  BinarySearchTree<T *> *bst = nullptr;
+  HashTable<T> *hashmap = nullptr;
   vector<T *> records;
   virtual string getHeader() = 0;
 
@@ -68,16 +68,18 @@ public:
   ~Database(void)
   {
     T *record;
-
-    while (!records.empty())
+    if (opened)
     {
-      record = records.back();
-      records.pop_back();
-      delete record;
-    }
+      while (!records.empty())
+      {
+        record = records.back();
+        records.pop_back();
+        delete record;
+      }
 
-    delete hashmap;
-    delete bst;
+      delete hashmap;
+      delete bst;
+    }
   }
 };
 

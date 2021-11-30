@@ -56,7 +56,8 @@ public:
 	 */
 	void saveToFile();
 
-	void loadFromFile();
+	bool loadFromFile(std::string);
+	void loadFromUserInput();
 
 	/**
 	* creates a new IO manager object with the hashtable DB and the BST DB
@@ -76,11 +77,6 @@ private:
 
 IOManager::IOManager()
 {
-	// TODO: probably move this to the main loop,
-	// or another init method which asks the user
-	// which file to open maybe even accept argv
-	// for funzies and quicker testing?
-	this->database.open("../data/small.csv");
 	deletedStack = new std::stack<Patient *>();
 }
 
@@ -90,51 +86,58 @@ void IOManager::startMainLoop()
 
 	while (true)
 	{
-		std::cout << "Choose an option from the menu" << std::endl;
-		std::cout << "\t1. Add Patient" << std::endl;
-		std::cout << "\t2. Delete Patient" << std::endl;
-		std::cout << "\t3. Undo Delete Of Patient" << std::endl;
-		std::cout << "\t4. Find Patient with Primary Key" << std::endl;
-		std::cout << "\t5. Find Patient with Secondary Key" << std::endl;
-		std::cout << "\t6. Display All Data" << std::endl;
-		std::cout << "\t7. Save to file" << std::endl;
-		std::cout << "\t8. Load from file" << std::endl;
-		std::cout << "\t9. Exit\n"
-							<< std::endl;
-
-		std::cin >> studentOption;
-
-		switch (studentOption)
+		if (database.isOpen())
 		{
-		case 1:
-			createData();
-			break;
-		case 2:
-			deleteData();
-			break;
-		case 3:
-			undoDelete();
-			break;
-		case 4:
-			findDataWithPrimaryKey();
-			break;
-		case 5:
-			findDataWithSecondaryKey();
-			break;
-		case 6:
-			displayData();
-			break;
-		case 7:
-			saveToFile();
-			break;
-		case 8:
-			loadFromFile();
-			break;
-		case 9:
-			std::cout << "Exiting..." << std::endl;
-			return;
-		default:
-			std::cout << "Please choose one of the options above" << std::endl;
+			std::cout << "Choose an option from the menu" << std::endl;
+			std::cout << "\t1. Add Patient" << std::endl;
+			std::cout << "\t2. Delete Patient" << std::endl;
+			std::cout << "\t3. Undo Delete Of Patient" << std::endl;
+			std::cout << "\t4. Find Patient with Primary Key" << std::endl;
+			std::cout << "\t5. Find Patient with Secondary Key" << std::endl;
+			std::cout << "\t6. Display All Data" << std::endl;
+			std::cout << "\t7. Save to file" << std::endl;
+			std::cout << "\t8. Load from file" << std::endl;
+			std::cout << "\t9. Exit\n"
+								<< std::endl;
+			std::cin >> studentOption;
+
+			switch (studentOption)
+			{
+			case 1:
+				createData();
+				break;
+			case 2:
+				deleteData();
+				break;
+			case 3:
+				undoDelete();
+				break;
+			case 4:
+				findDataWithPrimaryKey();
+				break;
+			case 5:
+				findDataWithSecondaryKey();
+				break;
+			case 6:
+				displayData();
+				break;
+			case 7:
+				saveToFile();
+				break;
+			case 8:
+				loadFromUserInput();
+				break;
+			case 9:
+				std::cout << "Exiting..." << std::endl;
+				return;
+			default:
+				std::cout << "Please choose one of the options above" << std::endl;
+			}
+		}
+		else
+		{
+			std::cout << "Please choose a database to open." << std::endl;
+			loadFromUserInput();
 		}
 	}
 }
@@ -165,12 +168,8 @@ void IOManager::findDataWithSecondaryKey()
 	std::cin.ignore();
 	std::getline(std::cin, secondaryKey);
 
-	cout << secondaryKey << endl;
-
 	Patient myPatient = Patient("", secondaryKey);
 	std::vector<Patient *> patients;
-
-	myPatient.print();
 
 	if (!database.secondarySearch(&myPatient, patients))
 	{
@@ -203,22 +202,26 @@ void IOManager::saveToFile()
 	}
 }
 
-void IOManager::loadFromFile()
+bool IOManager::loadFromFile(std::string fileName)
 {
-	std::string fileName;
-
 	if (database.isOpen())
 	{
 		database.close();
 	}
 
+	return database.open(fileName);
+}
+
+void IOManager::loadFromUserInput()
+{
+	std::string fileName;
 	std::cout << "Enter the file name: ";
 	std::cin >> fileName;
 
-	if (database.open(fileName))
+	if (loadFromFile(fileName))
 	{
 		std::cout << "Successfully loaded from file" << std::endl;
-		// delete deletedStack;
+		delete deletedStack;
 	}
 	else
 	{
@@ -251,7 +254,10 @@ void IOManager::createData()
 	std::cout << "Enter a patient id: " << std::endl;
 	std::cin >> id;
 	std::cout << "Enter a patient name: " << std::endl;
-	std::cin >> name;
+
+	std::cin.ignore();
+	std::getline(std::cin, name);
+
 	std::cout << "Enter a patient checkin time: " << std::endl;
 	std::cin >> checkin;
 	std::cout << "Enter a patient checkout time: " << std::endl;
@@ -278,7 +284,7 @@ void IOManager::createData()
 
 void IOManager::deleteData()
 {
-	std::cout << "enter the id of the patient to delete" << std::endl;
+	std::cout << "Enter the ID of the patient to delete:" << std::endl;
 
 	string id;
 	std::cin >> id;
@@ -304,7 +310,7 @@ void IOManager::undoDelete()
 {
 	if (deletedStack->empty())
 	{
-		std::cout << "No deleted items to undo" << std::endl;
+		std::cout << "No deleted items to undo." << std::endl;
 		return;
 	}
 
