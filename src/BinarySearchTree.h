@@ -41,7 +41,16 @@ template <class T>
 bool BinarySearchTree<T>::insert(const T &newEntry)
 {
 	BinaryNode<T> *newNodePtr = new BinaryNode<T>(newEntry);
-	this->rootPtr = _insert(this->rootPtr, newNodePtr);
+	if (this->isEmpty())
+	{
+		this->rootPtr = newNodePtr;
+		this->count++;
+	}
+	else
+	{
+		this->rootPtr = _insert(this->rootPtr, newNodePtr);
+	}
+
 	return true;
 }
 
@@ -59,35 +68,23 @@ bool BinarySearchTree<T>::search(const T &anEntry, std::vector<T> *returnedItem)
 
 //Implementation of the insert operation
 template <class T>
-BinaryNode<T> *BinarySearchTree<T>::_insert(BinaryNode<T> *nodePtr,
-																						BinaryNode<T> *newNodePtr)
+BinaryNode<T> *BinarySearchTree<T>::_insert(BinaryNode<T> *node, BinaryNode<T> *newNode)
 {
-	if (!nodePtr && this->isEmpty()) // == nullptr
+	if (!node)
 	{
-		nodePtr = newNodePtr;
-		this->count++;
-		return nodePtr;
+		return newNode;
 	}
-	if (nodePtr)
+
+	if ((*newNode->getItem()) < (*node->getItem()))
 	{
-		if ((nodePtr->getItem()) > (newNodePtr->getItem()))
-		{
-			if (!_insert(nodePtr->getLeftPtr(), newNodePtr))
-			{
-				nodePtr->setLeftPtr(newNodePtr);
-				this->count++;
-			}
-		}
-		else
-		{
-			if (!_insert(nodePtr->getRightPtr(), newNodePtr))
-			{
-				nodePtr->setRightPtr(newNodePtr);
-				this->count++;
-			}
-		}
+		node->setLeftPtr(_insert(node->getLeftPtr(), newNode));
 	}
-	return nodePtr;
+	else
+	{
+		node->setRightPtr(_insert(node->getRightPtr(), newNode));
+	}
+
+	return node;
 }
 
 //Implementation for the search operation
@@ -105,24 +102,21 @@ bool BinarySearchTree<T>::_search(BinaryNode<T> *nodePtr, const T target, std::v
 	{
 		return _search(nodePtr->getLeftPtr(), target, returnedItem);
 	}
+	else if (*(nodePtr->getItem()) < *(target))
+	{
+		return _search(nodePtr->getRightPtr(), target, returnedItem);
+	}
 	else
 	{
-		if (*(nodePtr->getItem()) < *(target))
-		{
-			return _search(nodePtr->getRightPtr(), target, returnedItem);
-		}
-		else
-		{
-			BinaryNode<T> *cur = nodePtr;
+		BinaryNode<T> *cur = nodePtr;
 
-			while (cur && *(cur->getItem()) == *(target))
-			{
-				returnedItem->push_back(cur->getItem());
-				cur = cur->getRightPtr();
-			}
-
-			return true;
+		while (cur && *(cur->getItem()) == *(target))
+		{
+			returnedItem->push_back(cur->getItem());
+			cur = cur->getRightPtr();
 		}
+
+		return true;
 	}
 	return false;
 }
