@@ -1,9 +1,17 @@
 # MacOS
 .DS_Store
 
+# Debugging
+
+a.out.dSYM/
+cmake-build-debug/
+CMakeLists.txt
+src.cbp
+
 # Editor Files
 .vs
 .vscode
+.idea
 
 # Prerequisites
 *.d
