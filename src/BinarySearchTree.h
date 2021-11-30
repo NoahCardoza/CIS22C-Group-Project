@@ -108,7 +108,7 @@ bool BinarySearchTree<T>::_search(BinaryNode<T> *nodePtr, const T target, std::v
 // - return true if target is found and deleted, otherwise
 // - returns false if the node is not found
 template <class T>
-T BinarySearchTree<T>::remove(const T target)
+T BinarySearchTree<T>::remove(const T target, BinaryNode<T> *rootPtr)
 {
 	BinaryNode<T> *parent = nullptr;
 	BinaryNode<T> *cur = this->rootPtr;
