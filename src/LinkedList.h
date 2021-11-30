@@ -17,6 +17,13 @@
 #include "HashNode.h"
 
 template <class T>
+class LinkedListIterator
+{
+public:
+	virtual void cb(T) = 0;
+};
+
+template <class T>
 class LinkedList
 {
 private:
@@ -36,6 +43,7 @@ public:
 	bool searchList(const T *target, T **dataOut) const;
 
 	T *pop();
+	void iterate(LinkedListIterator<T *> *iter);
 };
 
 template <class T>
@@ -189,6 +197,18 @@ T *LinkedList<T>::pop()
 
 	delete next;
 	return item;
+}
+
+template <class T>
+void LinkedList<T>::iterate(LinkedListIterator<T *> *iter)
+{
+	HashNode<T *> *pCur = head->getNext();
+
+	while (pCur)
+	{
+		iter->cb(pCur->getItem());
+		pCur = pCur->getNext();
+	}
 }
 
 #endif /* LinkedList_h */

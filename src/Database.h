@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "BinarySearchTree.h"
+#include "LinkedList.h"
 #include "HashTable.h"
 #include "Patient.h"
 
@@ -18,6 +19,24 @@ using std::string;
 
 // TODO: figure out how to use interfaces and inherit
 // from it for Patient class
+
+template <class T>
+class HashMapSaveToFileIter : public LinkedListIterator<T>
+{
+private:
+  ofstream *stream;
+
+public:
+  HashMapSaveToFileIter(ofstream *stream)
+  {
+    this->stream = stream;
+  }
+
+  void cb(T record)
+  {
+    record->toStream(stream);
+  }
+};
 
 template <class T>
 class Database
@@ -31,6 +50,7 @@ private:
 
 public:
   bool isOpen() { return opened; };
+  int size() { return records.size(); };
   bool open(string filename);
   bool close();
   bool save(string filename);
@@ -55,6 +75,9 @@ public:
       records.pop_back();
       delete record;
     }
+
+    delete hashmap;
+    delete bst;
   }
 };
 
@@ -168,12 +191,8 @@ bool Database<T>::save(string filename)
 
   out << getHeader() << endl;
 
-  // TODO: iterate the HashTable to write
-  // in the same order
-  for (auto const &record : records)
-  {
-    record->toStream(&out);
-  }
+  HashMapSaveToFileIter<T *> iter(&out);
+  hashmap->iterate(&iter);
 
   out.close();
 
@@ -195,7 +214,13 @@ bool Database<T>::secondarySearch(T *search, std::vector<T *> &ret)
 template <class T>
 bool Database<T>::insert(T *item)
 {
-  return hashmap->insert(item) && bst->insert(item);
+  if (hashmap->insert(item) && bst->insert(item))
+  {
+    records.push_back(item);
+    return true;
+  }
+
+  return false;
 }
 
 template <class T>

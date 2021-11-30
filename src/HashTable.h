@@ -9,6 +9,7 @@
 #define HashTable_h
 
 #include <iostream>
+#include <vector>
 #include "LinkedList.h"
 
 template <class T>
@@ -52,6 +53,8 @@ public:
     void rehash();
 
     bool getListItem(T **dataOut);
+
+    void iterate(LinkedListIterator<T *> *iter);
 
     static int calculateHashSize(int);
     static bool isPrime(int);
@@ -237,6 +240,21 @@ void HashTable<T>::rehash()
         }
     }
     delete[] oldAry;
+}
+
+/*~*~*~*
+   rehash() creates a new hash table with hashSize = the next prime number of 2 * original hash size, reallocate all items to the new hash table, and finally delete the old hash table.
+*~**/
+template <class T>
+void HashTable<T>::iterate(LinkedListIterator<T *> *iter)
+{
+    for (int i = 0; i < hashSize; i++)
+    {
+        if (hashAry[i].getLength())
+        {
+            hashAry[i].iterate(iter);
+        }
+    }
 }
 
 #endif /* HashTable_h */
