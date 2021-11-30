@@ -10,29 +10,12 @@ template <class T>
 class BinarySearchTree : public BinaryTree<T>
 {
 public:
-	// insert a node at the correct location
-	bool insert(const T &item);
-	// remove a node if found
-	T remove(const T target);
-	// find a target node
-	bool search(const T &target, std::vector<T> *returnedItem) const;
-	// find the smallest node
-	bool findSmallest(T &returnedItem) const;
-	// find the largest node
-	bool findLargest(T &returnedItem) const;
-
+	bool insert(const T &item);																				// insert a node at the correct location
+	T remove(const T target);																					// remove a node if found
+	bool search(const T &target, std::vector<T> *returnedItem) const; // find a target node
 private:
-	// internal insert node: insert newNode in nodePtr subtree
-	BinaryNode<T> *_insert(BinaryNode<T> *nodePtr, BinaryNode<T> *newNode);
-
-	// search for target node
-	bool _search(BinaryNode<T> *treePtr, const T target, std::vector<T> *returnedItem) const;
-
-	// find the smallest node
-	BinaryNode<T> *_findSmallest(BinaryNode<T> *nodePtr, T &smallest) const;
-
-	// find the largest node
-	BinaryNode<T> *_findLargest(BinaryNode<T> *nodePtr, T &smallest) const;
+	BinaryNode<T> *_insert(BinaryNode<T> *nodePtr, BinaryNode<T> *newNode);										// internal insert node: insert newNode in nodePtr subtree
+	bool _search(BinaryNode<T> *treePtr, const T target, std::vector<T> *returnedItem) const; // search for target node
 };
 
 ///////////////////////// public function definitions ///////////////////////////
