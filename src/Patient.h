@@ -4,7 +4,6 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <sstream>
 
 #include "Database.h"
 
@@ -14,13 +13,13 @@ class Patient
 {
 private:
   // columns
-  string id;   // primary key
-  string name; // secondary key
+  std::string id;   // primary key
+  std::string name; // secondary key
   int checkin;
   int checkout;
   char status;
   int age;
-  string country;
+  std::string country;
   char gender;
 
 public:
@@ -36,7 +35,7 @@ public:
     gender = 0;
   }
 
-  Patient(string id, string name)
+  Patient(std::string id, std::string name)
   {
     this->id = id;
     this->name = name;
@@ -48,7 +47,7 @@ public:
     gender = 0;
   }
 
-  Patient(string id, string name, int checkin, int checkout, int status, int age, string country, int gender)
+  Patient(std::string id, std::string name, int checkin, int checkout, int status, int age, std::string country, int gender)
   {
     this->id = id;
     this->name = name;
@@ -64,24 +63,24 @@ public:
   void toStream(std::ostream *out);
   void print(void) const;
 
-  // getters
-  void setId(string id) { this->id = id; }
-  void setName(string name) { this->name = name; }
+  // setters
+  void setId(std::string id) { this->id = id; }
+  void setName(std::string name) { this->name = name; }
   void setCheckin(int checkin) { this->checkin = checkin; }
   void setCheckout(int checkout) { this->checkout = checkout; }
   void setStatus(char status) { this->status = status; }
   void setAge(int age) { this->age = age; }
-  void setCountry(string country) { this->country = country; }
+  void setCountry(std::string country) { this->country = country; }
   void setGender(char gender) { this->gender = gender; }
 
-  // setters
-  string getId() const { return id; }
-  string getName() const { return name; }
+  // getters
+  std::string getId() const { return id; }
+  std::string getName() const { return name; }
   int getCheckin() const { return checkin; }
   int getCheckout() const { return checkout; }
   char getStatus() const { return status; }
   int getAge() const { return age; }
-  string getCountry() const { return country; }
+  std::string getCountry() const { return country; }
   char getGender() const { return gender; }
 
   // overloaded operators

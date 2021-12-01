@@ -11,7 +11,7 @@ using std::string;
 class PatientDatabase : public Database<Patient>
 {
 private:
-  string getHeader()
+  std::string getHeader()
   {
     return "id,name,checkin date,checkout date,status,age,country code,gender";
   }

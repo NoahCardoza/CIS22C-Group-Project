@@ -1,7 +1,4 @@
-#include "BinarySearchTree.h"
-#include "HashTable.h"
 #include "IOManager.h"
-#include "Patient.h"
 
 int main(int argc, char *argv[])
 {

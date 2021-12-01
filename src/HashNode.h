@@ -3,7 +3,6 @@
 //  CIS_22C_PROJECT
 //
 //  Created by Sarina Karki on 11/6/21.
-//
 
 #ifndef HashNode_h
 #define HashNode_h

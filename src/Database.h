@@ -46,14 +46,14 @@ private:
   BinarySearchTree<T *> *bst = nullptr;
   HashTable<T> *hashmap = nullptr;
   vector<T *> records;
-  virtual string getHeader() = 0;
+  virtual std::string getHeader() = 0;
 
 public:
   bool isOpen() { return opened; };
   int size() { return records.size(); };
-  bool open(string filename);
+  bool open(std::string filename);
   bool close();
-  bool save(string filename);
+  bool save(std::string filename);
   bool primarySearch(T *search, T **result);
   bool secondarySearch(T *search, std::vector<T *> &ret);
   bool remove(T *query, T **result);
@@ -94,7 +94,7 @@ public:
  * Returns success code.
  */
 template <class T>
-bool Database<T>::open(string filename)
+bool Database<T>::open(std::string filename)
 {
   if (opened)
   {
@@ -183,7 +183,7 @@ bool Database<T>::close()
  * Returns success code.
  */
 template <class T>
-bool Database<T>::save(string filename)
+bool Database<T>::save(std::string filename)
 {
   if (!opened)
   {
