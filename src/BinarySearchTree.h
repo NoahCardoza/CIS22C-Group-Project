@@ -11,11 +11,11 @@ class BinarySearchTree : public BinaryTree<T>
 {
 public:
 	bool insert(const T &item);																				// insert a node at the correct location
-	bool remove(const T target);																			// remove a node if found
+	T remove(const T target);																					// remove a node if found
 	bool search(const T &target, std::vector<T> *returnedItem) const; // find a target node
 private:
 	BinaryNode<T> *_insert(BinaryNode<T> *nodePtr, BinaryNode<T> *newNode); // internal insert node: insert newNode in nodePtr subtree
-	BinaryNode<T> *_remove(BinaryNode<T> *root, const T target);
+	BinaryNode<T> *_remove(BinaryNode<T> *root, const T target, T *deleted);
 	bool _search(BinaryNode<T> *treePtr, const T target, std::vector<T> *returnedItem) const; // search for target node
 };
 
@@ -109,14 +109,17 @@ bool BinarySearchTree<T>::_search(BinaryNode<T> *nodePtr, const T target, std::v
 // - return true if target is found and deleted, otherwise
 // - returns false if the node is not found
 template <class T>
-bool BinarySearchTree<T>::remove(const T target)
+T BinarySearchTree<T>::remove(const T target)
 {
-	this->rootPtr = _remove(this->rootPtr, target);
-	return true;
+	T deleted = nullptr;
+
+	this->rootPtr = _remove(this->rootPtr, target, &deleted);
+
+	return deleted;
 }
 
 template <class T>
-BinaryNode<T> *BinarySearchTree<T>::_remove(BinaryNode<T> *root, const T key)
+BinaryNode<T> *BinarySearchTree<T>::_remove(BinaryNode<T> *root, const T key, T *deleted)
 {
 	// base case
 	if (root == nullptr)
@@ -124,15 +127,18 @@ BinaryNode<T> *BinarySearchTree<T>::_remove(BinaryNode<T> *root, const T key)
 
 	// search the left subtree
 	if (*key < *root->getItem())
-		root->setLeftPtr(_remove(root->getLeftPtr(), key));
+		root->setLeftPtr(_remove(root->getLeftPtr(), key, deleted));
 
 	// search the right subtree
 	else if (*key > *root->getItem())
-		root->setRightPtr(_remove(root->getLeftPtr(), key));
+		root->setRightPtr(_remove(root->getRightPtr(), key, deleted));
 
 	// deleted the node
-	else
+	else if (key->getId() == root->getItem()->getId())
 	{
+		// save the pointer to the soon to be deleted item
+		*deleted = root->getItem();
+
 		// node has no child
 		if (root->getLeftPtr() == nullptr and root->getRightPtr() == nullptr)
 			return nullptr;
@@ -161,8 +167,14 @@ BinaryNode<T> *BinarySearchTree<T>::_remove(BinaryNode<T> *root, const T key)
 		root->setItem(temp->getItem());
 
 		// Delete the inorder successor
-		root->setRightPtr(_remove(root->getRightPtr(), temp->getItem()));
+		T dummy;
+		root->setRightPtr(_remove(root->getRightPtr(), temp->getItem(), &dummy));
 	}
+	else
+	{
+		root->setRightPtr(_remove(root->getRightPtr(), key, deleted));
+	}
+
 	return root;
 }
 
