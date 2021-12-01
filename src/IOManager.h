@@ -242,6 +242,9 @@ void IOManager::displayData()
 
 void IOManager::createData()
 {
+	Patient query;
+	Patient *dummy;
+
 	string id;
 	string name;
 	int checkin;
@@ -253,8 +256,15 @@ void IOManager::createData()
 
 	std::cout << "Enter a patient id: " << std::endl;
 	std::cin >> id;
-	std::cout << "Enter a patient name: " << std::endl;
 
+	query.setId(id);
+	if (database.primarySearch(&query, &dummy))
+	{
+		std::cout << "Error: A patient with this ID already exists!" << std::endl;
+		return;
+	}
+
+	std::cout << "Enter a patient name: " << std::endl;
 	std::cin.ignore();
 	std::getline(std::cin, name);
 
