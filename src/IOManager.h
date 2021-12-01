@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 #include <stack>
 
 #include "HashTable.h"
@@ -11,8 +12,6 @@
 #include "Patient.h"
 #include "PatientDatabase.h"
 
-//TODO There are still some compiler errors I believe
-//
 class IOManager
 {
 public:
@@ -56,7 +55,14 @@ public:
 	 */
 	void saveToFile();
 
+	/**
+	 * loads data from the save file
+	 */
 	bool loadFromFile(std::string);
+
+	/**
+	 * loads data from specified file from user
+	 */
 	void loadFromUserInput();
 
 	/**
@@ -65,6 +71,9 @@ public:
 	IOManager();
 
 private:
+	/**
+	 * class interface to manipulate / display the data
+	 */
 	PatientDatabase database;
 
 	/**
@@ -82,62 +91,86 @@ IOManager::IOManager()
 
 void IOManager::startMainLoop()
 {
-	int studentOption;
+	std::string studentOption;
+
+	if (!database.isOpen())
+	{
+		std::cout << "Please choose a database to open." << std::endl;
+		loadFromUserInput();
+	}
+
+	std::cout << "Choose an option from the menu" << std::endl;
+	std::cout << "\t(add) - Add Patient" << std::endl;
+	std::cout << "\t(delete) - Delete Patient" << std::endl;
+	std::cout << "\t(undo) - Undo Delete Of Patient" << std::endl;
+	std::cout << "\t(find_primary) - Patient with Primary Key" << std::endl;
+	std::cout << "\t(find_secondary) - Find Patient with Secondary Key" << std::endl;
+	std::cout << "\t(display) - Display All Data" << std::endl;
+	std::cout << "\t(save) - Save to file" << std::endl;
+	std::cout << "\t(load) - Load from file" << std::endl;
+	std::cout << "\t(help) - Displays this menu again" << std::endl;
+	std::cout << "\t(exit) - Exit\n"
+			  << std::endl;
 
 	while (true)
 	{
-		if (database.isOpen())
+		std::cin >> studentOption;
+
+		if (studentOption == "add")
+		{
+			createData();
+		}
+		else if (studentOption == "delete")
+		{
+			deleteData();
+		}
+		else if (studentOption == "undo")
+		{
+			undoDelete();
+		}
+		else if (studentOption == "find_primary")
+		{
+			findDataWithPrimaryKey();
+		}
+		else if (studentOption == "find_secondary")
+		{
+			findDataWithSecondaryKey();
+		}
+		else if (studentOption == "display")
+		{
+			displayData();
+		}
+		else if (studentOption == "save")
+		{
+			saveToFile();
+		}
+		else if (studentOption == "load")
+		{
+			loadFromUserInput();
+		}
+		else if (studentOption == "help")
 		{
 			std::cout << "Choose an option from the menu" << std::endl;
-			std::cout << "\t1. Add Patient" << std::endl;
-			std::cout << "\t2. Delete Patient" << std::endl;
-			std::cout << "\t3. Undo Delete Of Patient" << std::endl;
-			std::cout << "\t4. Find Patient with Primary Key" << std::endl;
-			std::cout << "\t5. Find Patient with Secondary Key" << std::endl;
-			std::cout << "\t6. Display All Data" << std::endl;
-			std::cout << "\t7. Save to file" << std::endl;
-			std::cout << "\t8. Load from file" << std::endl;
-			std::cout << "\t9. Exit\n"
-								<< std::endl;
-			std::cin >> studentOption;
-
-			switch (studentOption)
-			{
-			case 1:
-				createData();
-				break;
-			case 2:
-				deleteData();
-				break;
-			case 3:
-				undoDelete();
-				break;
-			case 4:
-				findDataWithPrimaryKey();
-				break;
-			case 5:
-				findDataWithSecondaryKey();
-				break;
-			case 6:
-				displayData();
-				break;
-			case 7:
-				saveToFile();
-				break;
-			case 8:
-				loadFromUserInput();
-				break;
-			case 9:
-				std::cout << "Exiting..." << std::endl;
-				return;
-			default:
-				std::cout << "Please choose one of the options above" << std::endl;
-			}
+			std::cout << "\t(add) - Add Patient" << std::endl;
+			std::cout << "\t(delete) - Delete Patient" << std::endl;
+			std::cout << "\t(undo) - Undo Delete Of Patient" << std::endl;
+			std::cout << "\t(find_primary) - Patient with Primary Key" << std::endl;
+			std::cout << "\t(find_secondary) - Find Patient with Secondary Key" << std::endl;
+			std::cout << "\t(display) - Display All Data" << std::endl;
+			std::cout << "\t(save) - Save to file" << std::endl;
+			std::cout << "\t(load) - Load from file" << std::endl;
+			std::cout << "\t(help) - Displays this menu again" << std::endl;
+			std::cout << "\t(exit) - Exit\n"
+					  << std::endl;
+		}
+		else if (studentOption == "exit")
+		{
+			saveToFile();
+			std::cout << "Exiting..." << std::endl;
 		}
 		else
 		{
-			std::cout << "Please choose a database to open." << std::endl;
-			loadFromUserInput();
+			std::cout << "Invalid option. Please try again." << std::endl;
 		}
 	}
 }
@@ -194,7 +227,7 @@ void IOManager::saveToFile()
 	if (database.save(fileName))
 	{
 		std::cout << "Successfully saved to file" << std::endl;
-		delete &deletedStack;
+		delete deletedStack;
 	}
 	else
 	{
@@ -234,10 +267,29 @@ void visitPatient(Patient *patient)
 	patient->toStream(&std::cout);
 }
 
+void visitPatient(Patient *patient, int level)
+{
+	std::cout << std::setw(level * 4) << "";
+	patient->toStream(&std::cout);
+}
+
 void IOManager::displayData()
 {
 	std::cout << "Displaying all data" << std::endl;
+	database.displayStatistics();
 	database.displayData(visitPatient);
+
+	std::cout << "Finished dispalying data" << std::endl;
+	std::cout << "Do you want to display data in an indented tree? (y/n)" << std::endl;
+
+	std::string option;
+	std::cin >> option;
+	if (option == "y")
+	{
+		std::cout << "Displaying data in an indented tree" << std::endl;
+		database.displayDataIndented(visitPatient);
+		std::cout << "Finished displaying data in an indented tree" << std::endl;
+	}
 }
 
 void IOManager::createData()
@@ -305,8 +357,6 @@ void IOManager::deleteData()
 	if (database.remove(&patientKey, &itemOut))
 	{
 		std::cout << "Successfully deleted patient from database!" << std::endl;
-		delete deletedStack;
-		deletedStack = new std::stack<Patient *>();
 	}
 	else
 	{

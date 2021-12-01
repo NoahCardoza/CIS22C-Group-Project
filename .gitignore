@@ -48,3 +48,5 @@ src.cbp
 *.exe
 *.out
 *.app
+
+main

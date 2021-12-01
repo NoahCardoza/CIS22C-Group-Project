@@ -59,6 +59,8 @@ public:
   bool remove(T *query, T **result);
   bool insert(T *item);
   void displayData(void visit(T *));
+  void displayStatistics();
+  void displayDataIndented(void visit(T *, int));
 
   /**
    * Empties the vector holding the
@@ -144,7 +146,7 @@ bool Database<T>::open(string filename)
  * Close the database freeing all the
  * pointers ready to close the program
  * or open another file.
- * 
+ *
  * Don't forget to save!
  *
  * Returns success code.
@@ -244,4 +246,18 @@ void Database<T>::displayData(void visit(T *))
 {
   bst->inOrder(visit);
 }
+
+template <class T>
+void Database<T>::displayStatistics()
+{
+	hashmap->displayStatistics();
+}
+
+template <class T>
+void Database<T>::displayDataIndented(void visit(T *, int))
+{
+  bst->printTree(visit);
+}
+
+
 #endif
