@@ -15,9 +15,13 @@ public:
   {
     Patient query("frodo-1", "Frodo Baggins");
     Patient *result;
+
     result = this->remove(&query);
 
     assert(result->getId() == "frodo-1");
+    assert(this->rootPtr->getItem()->getName() == "George");
+    assert(this->rootPtr->getLeftPtr()->getItem()->getName() == "Alfrid Lickspittle");
+    assert(this->rootPtr->getRightPtr()->getItem()->getName() == "Samwise Gamgee");
   }
 };
 
