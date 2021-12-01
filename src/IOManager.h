@@ -12,6 +12,10 @@
 #include "Patient.h"
 #include "PatientDatabase.h"
 
+void printPatient(Patient *p);
+void visitPatient(Patient *patient, int level);
+void printHeader();
+
 class IOManager
 {
 public:
@@ -100,55 +104,60 @@ void IOManager::startMainLoop()
 	}
 
 	std::cout << "Choose an option from the menu" << std::endl;
-	std::cout << "\t(add) - Add Patient" << std::endl;
-	std::cout << "\t(delete) - Delete Patient" << std::endl;
-	std::cout << "\t(undo) - Undo Delete Of Patient" << std::endl;
-	std::cout << "\t(find_primary) - Patient with Primary Key" << std::endl;
-	std::cout << "\t(find_secondary) - Find Patient with Secondary Key" << std::endl;
-	std::cout << "\t(display) - Display All Data" << std::endl;
-	std::cout << "\t(save) - Save to file" << std::endl;
-	std::cout << "\t(load) - Load from file" << std::endl;
-	std::cout << "\t(help) - Displays this menu again" << std::endl;
-	std::cout << "\t(exit) - Exit\n"
-			  << std::endl;
+	std::cout << "\t(a)  - Add Patient" << std::endl;
+	std::cout << "\t(d)  - Delete Patient" << std::endl;
+	std::cout << "\t(u)  - Undo Delete Of Patient" << std::endl;
+	std::cout << "\t(fp) - Patient with Primary Key" << std::endl;
+	std::cout << "\t(fs) - Find Patient with Secondary Key" << std::endl;
+	std::cout << "\t(l)  - Display All Data" << std::endl;
+	std::cout << "\t(s)  - Save to file" << std::endl;
+	std::cout << "\t(o)  - Load from file" << std::endl;
+	std::cout << "\t(h)  - Displays this menu again" << std::endl;
+	std::cout << "\t(e)  - Exit\n"
+						<< std::endl;
 
 	while (true)
 	{
+		std::cout << "> ";
 		std::cin >> studentOption;
 
-		if (studentOption == "add")
+		if (studentOption == "a")
 		{
 			createData();
 		}
-		else if (studentOption == "delete")
+		else if (studentOption == "d")
 		{
 			deleteData();
 		}
-		else if (studentOption == "undo")
+		else if (studentOption == "u")
 		{
 			undoDelete();
 		}
-		else if (studentOption == "find_primary")
+		else if (studentOption == "fp")
 		{
 			findDataWithPrimaryKey();
 		}
-		else if (studentOption == "find_secondary")
+		else if (studentOption == "fs")
 		{
 			findDataWithSecondaryKey();
 		}
-		else if (studentOption == "display")
+		else if (studentOption == "l")
 		{
 			displayData();
 		}
-		else if (studentOption == "save")
+		else if (studentOption == "li")
+		{
+			database.displayDataIndented(visitPatient);
+		}
+		else if (studentOption == "a")
 		{
 			saveToFile();
 		}
-		else if (studentOption == "load")
+		else if (studentOption == "o")
 		{
 			loadFromUserInput();
 		}
-		else if (studentOption == "help")
+		else if (studentOption == "h")
 		{
 			std::cout << "Choose an option from the menu" << std::endl;
 			std::cout << "\t(add) - Add Patient" << std::endl;
@@ -161,12 +170,13 @@ void IOManager::startMainLoop()
 			std::cout << "\t(load) - Load from file" << std::endl;
 			std::cout << "\t(help) - Displays this menu again" << std::endl;
 			std::cout << "\t(exit) - Exit\n"
-					  << std::endl;
+								<< std::endl;
 		}
-		else if (studentOption == "exit")
+		else if (studentOption == "q")
 		{
 			saveToFile();
 			std::cout << "Exiting..." << std::endl;
+			return;
 		}
 		else
 		{
@@ -191,7 +201,8 @@ void IOManager::findDataWithPrimaryKey()
 	}
 
 	std::cout << "Patient found:" << std::endl;
-	patient->toStream(&std::cout);
+	printHeader();
+	printPatient(patient);
 }
 
 void IOManager::findDataWithSecondaryKey()
@@ -212,9 +223,10 @@ void IOManager::findDataWithSecondaryKey()
 
 	std::cout << "Patient(s) found:" << std::endl;
 
+	printHeader();
 	for (auto const &patient : patients)
 	{
-		patient->toStream(&std::cout);
+		printPatient(patient);
 	}
 }
 
@@ -262,34 +274,52 @@ void IOManager::loadFromUserInput()
 	}
 }
 
-void visitPatient(Patient *patient)
+void printHeader()
 {
-	patient->toStream(&std::cout);
+	std::cout << "----------------------------------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << left;
+	std::cout << " " << setw(36) << "ID"
+						<< "  ";
+	std::cout << " " << setw(18) << "Name"
+						<< "  ";
+	std::cout << " " << setw(10) << "Check-in"
+						<< "  ";
+	std::cout << " " << setw(10) << "Check-out"
+						<< "  ";
+	std::cout << " Status  ";
+	std::cout << " Age  ";
+	std::cout << " Country  ";
+	std::cout << " Gender  ";
+	std::cout << std::endl;
+	std::cout << "----------------------------------------------------------------------------------------------------------------------" << std::endl;
 }
 
-void visitPatient(Patient *patient, int level)
+void printPatient(Patient *p)
+{
+	std::cout << left;
+	std::cout << " " << p->getId() << "  ";
+	std::cout << " " << setw(18) << p->getName() << "  ";
+	std::cout << " " << p->getCheckin() << "  ";
+	std::cout << " " << p->getCheckout() << "  ";
+	std::cout << " " << setw(6) << p->getStatus() << "  ";
+	std::cout << " " << setw(3) << p->getAge() << "  ";
+	std::cout << " " << setw(7) << p->getCountry() << "  ";
+	std::cout << " " << setw(6) << p->getGender() << "  ";
+	std::cout << std::endl;
+}
+
+void visitPatient(Patient *p, int level)
 {
 	std::cout << std::setw(level * 4) << "";
-	patient->toStream(&std::cout);
+	std::cout << p->getId() << "  " << p->getName() << std::endl;
 }
 
 void IOManager::displayData()
 {
 	std::cout << "Displaying all data" << std::endl;
 	database.displayStatistics();
-	database.displayData(visitPatient);
-
-	std::cout << "Finished dispalying data" << std::endl;
-	std::cout << "Do you want to display data in an indented tree? (y/n)" << std::endl;
-
-	std::string option;
-	std::cin >> option;
-	if (option == "y")
-	{
-		std::cout << "Displaying data in an indented tree" << std::endl;
-		database.displayDataIndented(visitPatient);
-		std::cout << "Finished displaying data in an indented tree" << std::endl;
-	}
+	printHeader();
+	database.displayData(printPatient);
 }
 
 void IOManager::createData()
