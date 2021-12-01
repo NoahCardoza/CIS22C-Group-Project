@@ -11,10 +11,11 @@ class BinarySearchTree : public BinaryTree<T>
 {
 public:
 	bool insert(const T &item);																				// insert a node at the correct location
-	T remove(const T target);																					// remove a node if found
+	bool remove(const T target);																			// remove a node if found
 	bool search(const T &target, std::vector<T> *returnedItem) const; // find a target node
 private:
-	BinaryNode<T> *_insert(BinaryNode<T> *nodePtr, BinaryNode<T> *newNode);										// internal insert node: insert newNode in nodePtr subtree
+	BinaryNode<T> *_insert(BinaryNode<T> *nodePtr, BinaryNode<T> *newNode); // internal insert node: insert newNode in nodePtr subtree
+	BinaryNode<T> *_remove(BinaryNode<T> *root, const T target);
 	bool _search(BinaryNode<T> *treePtr, const T target, std::vector<T> *returnedItem) const; // search for target node
 };
 
@@ -108,109 +109,61 @@ bool BinarySearchTree<T>::_search(BinaryNode<T> *nodePtr, const T target, std::v
 // - return true if target is found and deleted, otherwise
 // - returns false if the node is not found
 template <class T>
-T BinarySearchTree<T>::remove(const T target)
+bool BinarySearchTree<T>::remove(const T target)
 {
-	BinaryNode<T> *parent = nullptr;
-	BinaryNode<T> *cur = this->rootPtr;
-	T ret;
-	while (cur != nullptr)
+	this->rootPtr = _remove(this->rootPtr, target);
+	return true;
+}
+
+template <class T>
+BinaryNode<T> *BinarySearchTree<T>::_remove(BinaryNode<T> *root, const T key)
+{
+	// base case
+	if (root == nullptr)
+		return root;
+
+	// search the left subtree
+	if (*key < *root->getItem())
+		root->setLeftPtr(_remove(root->getLeftPtr(), key));
+
+	// search the right subtree
+	else if (*key > *root->getItem())
+		root->setRightPtr(_remove(root->getLeftPtr(), key));
+
+	// deleted the node
+	else
 	{
-		if (*cur->getItem() < *target) // Search right
-		{
-			parent = cur;
-			cur = cur->getRightPtr();
-		}
-		else if (*cur->getItem() > *target)
-		{ // Search left
-			parent = cur;
-			cur = cur->getLeftPtr();
-		}
-		// TODO: maybe remove the call to getId and accept a callback cmp function? #ADTsAreAIDS
-		else if (*cur->getItem() == *target && cur->getItem()->getId() == target->getId()) // Node found
-		{
-			if (!cur->getLeftPtr() && !cur->getRightPtr()) // Remove leaf node
-			{
-				if (parent == nullptr) // Node is root
-				{
-					this->rootPtr = nullptr;
-				}
-				else if (parent->getLeftPtr() == cur)
-					parent->setLeftPtr(nullptr);
-				else
-					parent->setRightPtr(nullptr);
-				ret = cur->getItem();
-				delete cur;
-				return ret;
-			}
-			else if (!cur->getRightPtr()) // Remove node with only left child
-			{
-				if (parent == nullptr) // Node is root
-				{
-					this->rootPtr = cur->getLeftPtr();
-				}
-				else if (parent->getLeftPtr() == cur)
-				{
-					parent->setLeftPtr(cur->getLeftPtr());
-				}
-				else
-				{
-					parent->setRightPtr(cur->getLeftPtr());
-				}
-				ret = cur->getItem();
-				delete cur;
-				return ret;
-			}
-			else if (!cur->getLeftPtr()) // Remove node with only right child
-			{
-				if (parent == nullptr) // Node is root
-					this->rootPtr = cur->getRightPtr();
-				else if (parent->getLeftPtr() == cur)
-					parent->setLeftPtr(cur->getLeftPtr());
-				else
-					parent->setRightPtr(cur->getRightPtr());
-				ret = cur->getItem();
-				delete cur;
-				return ret;
-			}
-			else // Remove node with two children
-			{
-				// Find successor (leftmost child of right subtree)
-				BinaryNode<T> *suc = cur->getRightPtr();
-				BinaryNode<T> *sucParent = suc;
-				while (suc->getLeftPtr() != nullptr)
-				{
-					sucParent = suc;
-					suc = suc->getLeftPtr();
-				}
-				sucParent->setLeftPtr(suc->getRightPtr());
-				suc->setLeftPtr(cur->getLeftPtr());
+		// node has no child
+		if (root->getLeftPtr() == nullptr and root->getRightPtr() == nullptr)
+			return nullptr;
 
-				if (parent == nullptr) // Node is root
-				{
-					this->rootPtr = suc;
-				}
-				else if (parent->getLeftPtr() == cur)
-				{
-					parent->setLeftPtr(suc);
-				}
-				else
-				{
-					parent->setRightPtr(suc);
-				}
-
-				ret = cur->getItem();
-				delete cur;
-
-				return ret;
-			}
-		}
-		else
+		// node with only one child or no child
+		else if (root->getLeftPtr() == nullptr)
 		{
-			parent = cur;
-			cur = cur->getRightPtr();
+			BinaryNode<T> *temp = root->getRightPtr();
+			delete root;
+			return temp;
 		}
+		else if (root->getRightPtr() == nullptr)
+		{
+			BinaryNode<T> *temp = root->getLeftPtr();
+			delete root;
+			return temp;
+		}
+
+		// node with two children: Get the inorder successor
+		// (smallest in the right subtree)
+		BinaryNode<T> *temp = root->getRightPtr();
+		while (temp && temp->getLeftPtr() != nullptr)
+			temp = temp->getLeftPtr();
+
+		// Copy the inorder successor's content to this node
+		root->setItem(temp->getItem());
+
+		// Delete the inorder successor
+		root->setRightPtr(_remove(root->getRightPtr(), temp->getItem()));
 	}
-	return nullptr; // Node not found
+	return root;
 }
 
 #endif
