@@ -70,9 +70,11 @@ void BinaryTree<T>::_inorder(void visit(T), BinaryNode<T> *nodePtr) const
 {
 	if (nodePtr) // != nullptr
 	{
-		T item = nodePtr->getItem();
 		_inorder(visit, nodePtr->getLeftPtr());
-		visit(item);
+		for (T item : nodePtr->getItems())
+		{
+			visit(item);
+		}
 		_inorder(visit, nodePtr->getRightPtr());
 	}
 }

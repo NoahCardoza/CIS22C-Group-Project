@@ -136,8 +136,6 @@ BinaryNode<T> *BinarySearchTree<T>::_remove(BinaryNode<T> *root, const T key, T 
 	{
 		T item = root->removeItem(key);
 
-		item->print();
-
 		if (!item)
 		{
 			return root;
