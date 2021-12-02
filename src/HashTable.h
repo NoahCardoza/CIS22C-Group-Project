@@ -24,13 +24,6 @@ private:
     int hash(const T *key);
 
 public:
-    HashTable()
-    {
-        count = 0;
-        hashSize = 53;
-        collisionCount = 0;
-        hashAry = new LinkedList<T>[hashSize];
-    }
     HashTable(int n)
     {
         count = 0;

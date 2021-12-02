@@ -12,11 +12,6 @@
 #include "Patient.h"
 #include "PatientDatabase.h"
 
-void printTablePatient(Patient *p);
-void visitPatient(Patient *patient, int level);
-void printTableHeader();
-void printTableDivider();
-
 class IOManager
 {
 public:
@@ -212,13 +207,18 @@ void IOManager::startMainLoop()
 		{
 			printMenue();
 		}
-		else if(studentOption == "c" || studentOption == "credits")
+		else if (studentOption == "c" || studentOption == "credits")
 		{
 			printProjectInfo();
 		}
-		else if (studentOption == "e" || studentOption == "q")
+		else if (studentOption == "q")
 		{
 			saveToFile();
+			std::cout << "Exiting..." << std::endl;
+			return;
+		}
+		else if (studentOption == "!q") // similar to vim (quit without saving)
+		{
 			std::cout << "Exiting..." << std::endl;
 			return;
 		}
@@ -244,7 +244,7 @@ void IOManager::printMenue()
 	std::cout << "│  (s)  - Save to CSV                 │" << std::endl;
 	std::cout << "│  (o)  - Open database from CSV      │" << std::endl;
 	std::cout << "│  (h)  - Help                        │" << std::endl;
-	std::cout << "│  (e)  - Exit                        │" << std::endl;
+	std::cout << "│  (q)  - Quit                        │" << std::endl;
 	std::cout << "└─────────────────────────────────────┘" << std::endl;
 }
 
