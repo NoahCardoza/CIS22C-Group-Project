@@ -12,13 +12,41 @@
 #include "Patient.h"
 #include "PatientDatabase.h"
 
-void printPatient(Patient *p);
+void printTablePatient(Patient *p);
 void visitPatient(Patient *patient, int level);
-void printHeader();
+void printTableHeader();
+void printTableDivider();
 
 class IOManager
 {
 public:
+	/**
+	 * print out a menue to the user
+	 */
+	void printMenue();
+
+	/**
+	 * print the line divinding parts of the table
+	 */
+	void printTableDivider();
+
+	/**
+	 * prints out the header for the table when puting database
+	 * information
+	 */
+	void printTableHeader();
+
+	/**
+	 * prints out a patient in table form
+	 */
+	static void printTablePatient(Patient *);
+
+	/**
+	 * prints out a patient information when displaying
+	 * the indented tree
+	 */
+	static void visitPatient(Patient *, int);
+
 	/**
 	 * collects the input from the user and creates a new patient
 	 */
@@ -30,17 +58,20 @@ public:
 	void deleteData();
 
 	/**
-	 * undoes a delete if a user has recently deletedData (gets information from deletedStack)
+	 * undoes a delete if a user has recently deletedData
+	 * (gets information from deletedStack)
 	 */
 	void undoDelete();
 
 	/**
-	 * Collects input from the user, then finds the specified patient using it's primary key
+	 * Collects input from the user, then finds the specified patient using it's
+	 * primary key
 	 */
 	void findDataWithPrimaryKey();
 
 	/**
-	 * collects the input from the user then finds the specified patients using their secondary key
+	 * collects the input from the user then finds the specified patients using
+	 * their secondary key
 	 */
 	void findDataWithSecondaryKey();
 
@@ -50,7 +81,8 @@ public:
 	void displayData();
 
 	/**
-	 * starts the main loop which displays the menu and collects the users input, then calls the appropriate function to handle the rest
+	 * starts the main loop which displays the menu and collects the users input,
+	 * then calls the appropriate function to handle the rest
 	 */
 	void startMainLoop();
 
@@ -99,29 +131,18 @@ void IOManager::startMainLoop()
 
 	if (!database.isOpen())
 	{
-		std::cout << "Please choose a database to open." << std::endl;
-		loadFromUserInput();
+		std::cout << "No databse has been selected." << std::endl;
+		database.create();
 	}
 
-	std::cout << "Choose an option from the menu" << std::endl;
-	std::cout << "\t(a)  - Add Patient" << std::endl;
-	std::cout << "\t(d)  - Delete Patient" << std::endl;
-	std::cout << "\t(u)  - Undo Delete Of Patient" << std::endl;
-	std::cout << "\t(fp) - Patient with Primary Key" << std::endl;
-	std::cout << "\t(fs) - Find Patient with Secondary Key" << std::endl;
-	std::cout << "\t(l)  - Display All Data" << std::endl;
-	std::cout << "\t(s)  - Save to file" << std::endl;
-	std::cout << "\t(o)  - Load from file" << std::endl;
-	std::cout << "\t(h)  - Displays this menu again" << std::endl;
-	std::cout << "\t(e)  - Exit\n"
-						<< std::endl;
+	printMenue();
 
 	while (true)
 	{
-		std::cout << "> ";
+		std::cout << "Enter an option (h for help) > ";
 		std::cin >> studentOption;
 
-		if (studentOption == "a")
+		if (studentOption == "i")
 		{
 			createData();
 		}
@@ -147,9 +168,13 @@ void IOManager::startMainLoop()
 		}
 		else if (studentOption == "li")
 		{
-			database.displayDataIndented(visitPatient);
+			database.displayDataIndented(visitPatient); // TODO: include in call stack
 		}
-		else if (studentOption == "a")
+		else if (studentOption == "t")
+		{
+			database.displayStatistics(); // TODO: include in call stack
+		}
+		else if (studentOption == "s")
 		{
 			saveToFile();
 		}
@@ -157,22 +182,11 @@ void IOManager::startMainLoop()
 		{
 			loadFromUserInput();
 		}
-		else if (studentOption == "h")
+		else if (studentOption == "h" || studentOption == "?" || studentOption == "help")
 		{
-			std::cout << "Choose an option from the menu" << std::endl;
-			std::cout << "\t(add) - Add Patient" << std::endl;
-			std::cout << "\t(delete) - Delete Patient" << std::endl;
-			std::cout << "\t(undo) - Undo Delete Of Patient" << std::endl;
-			std::cout << "\t(find_primary) - Patient with Primary Key" << std::endl;
-			std::cout << "\t(find_secondary) - Find Patient with Secondary Key" << std::endl;
-			std::cout << "\t(display) - Display All Data" << std::endl;
-			std::cout << "\t(save) - Save to file" << std::endl;
-			std::cout << "\t(load) - Load from file" << std::endl;
-			std::cout << "\t(help) - Displays this menu again" << std::endl;
-			std::cout << "\t(exit) - Exit\n"
-								<< std::endl;
+			printMenue();
 		}
-		else if (studentOption == "q")
+		else if (studentOption == "e" || studentOption == "q")
 		{
 			saveToFile();
 			std::cout << "Exiting..." << std::endl;
@@ -183,6 +197,25 @@ void IOManager::startMainLoop()
 			std::cout << "Invalid option. Please try again." << std::endl;
 		}
 	}
+}
+
+void IOManager::printMenue()
+{
+	std::cout << "┌=====================================┐" << std::endl;
+	std::cout << "│                 MENU                │" << std::endl;
+	std::cout << "│=====================================│" << std::endl;
+	std::cout << "│  (i)  - Insert                      │" << std::endl;
+	std::cout << "│  (d)  - Delete                      │" << std::endl;
+	std::cout << "│  (u)  - Undo deletion               │" << std::endl;
+	std::cout << "│  (fp) - Find by primary key         │" << std::endl;
+	std::cout << "│  (fs) - Find all by secondary key   │" << std::endl;
+	std::cout << "│  (l)  - List                        │" << std::endl;
+	std::cout << "│  (t)  - Statistics                  │" << std::endl;
+	std::cout << "│  (s)  - Save to CSV                 │" << std::endl;
+	std::cout << "│  (o)  - Open database from CSV      │" << std::endl;
+	std::cout << "│  (h)  - Help                        │" << std::endl;
+	std::cout << "│  (e)  - Exit                        │" << std::endl;
+	std::cout << "└─────────────────────────────────────┘" << std::endl;
 }
 
 void IOManager::findDataWithPrimaryKey()
@@ -201,8 +234,8 @@ void IOManager::findDataWithPrimaryKey()
 	}
 
 	std::cout << "Patient found:" << std::endl;
-	printHeader();
-	printPatient(patient);
+	printTableHeader();
+	printTablePatient(patient);
 }
 
 void IOManager::findDataWithSecondaryKey()
@@ -223,17 +256,18 @@ void IOManager::findDataWithSecondaryKey()
 
 	std::cout << "Patient(s) found:" << std::endl;
 
-	printHeader();
+	printTableHeader();
 	for (auto const &patient : patients)
 	{
-		printPatient(patient);
+		printTablePatient(patient);
 	}
+	printTableDivider();
 }
 
 void IOManager::saveToFile()
 {
 	std::string fileName;
-	std::cout << "Enter the file name: ";
+	std::cout << "Enter the file name to save to: ";
 	std::cin >> fileName;
 
 	if (database.save(fileName))
@@ -274,9 +308,14 @@ void IOManager::loadFromUserInput()
 	}
 }
 
-void printHeader()
+void IOManager::printTableDivider()
 {
 	std::cout << "----------------------------------------------------------------------------------------------------------------------" << std::endl;
+}
+
+void IOManager::printTableHeader()
+{
+	printTableDivider();
 	std::cout << left;
 	std::cout << " " << setw(36) << "ID"
 						<< "  ";
@@ -291,10 +330,10 @@ void printHeader()
 	std::cout << " Country  ";
 	std::cout << " Gender  ";
 	std::cout << std::endl;
-	std::cout << "----------------------------------------------------------------------------------------------------------------------" << std::endl;
+	printTableDivider();
 }
 
-void printPatient(Patient *p)
+void IOManager::printTablePatient(Patient *p)
 {
 	std::cout << left;
 	std::cout << " " << p->getId() << "  ";
@@ -308,7 +347,7 @@ void printPatient(Patient *p)
 	std::cout << std::endl;
 }
 
-void visitPatient(Patient *p, int level)
+void IOManager::visitPatient(Patient *p, int level)
 {
 	std::cout << std::setw(level * 4) << "";
 	std::cout << p->getId() << "  " << p->getName() << std::endl;
@@ -316,10 +355,9 @@ void visitPatient(Patient *p, int level)
 
 void IOManager::displayData()
 {
-	std::cout << "Displaying all data" << std::endl;
-	database.displayStatistics();
-	printHeader();
-	database.displayData(printPatient);
+	printTableHeader();
+	database.displayData(printTablePatient);
+	printTableDivider();
 }
 
 void IOManager::createData()
@@ -336,7 +374,7 @@ void IOManager::createData()
 	string country;
 	char gender;
 
-	std::cout << "Enter a patient id: " << std::endl;
+	std::cout << "ID: ";
 	std::cin >> id;
 
 	query.setId(id);
@@ -346,21 +384,21 @@ void IOManager::createData()
 		return;
 	}
 
-	std::cout << "Enter a patient name: " << std::endl;
+	std::cout << "Name: ";
 	std::cin.ignore();
 	std::getline(std::cin, name);
 
-	std::cout << "Enter a patient checkin time: " << std::endl;
+	std::cout << "Checkin time: ";
 	std::cin >> checkin;
-	std::cout << "Enter a patient checkout time: " << std::endl;
+	std::cout << "Checkout time: ";
 	std::cin >> checkout;
-	std::cout << "Enter a patient status (D, R (recovered), S (sick)): " << std::endl;
+	std::cout << "Status (D, R (recovered), S (sick)): ";
 	std::cin >> status;
-	std::cout << "Enter a patient age: " << std::endl;
+	std::cout << "Age: ";
 	std::cin >> age;
-	std::cout << "Enter a patient country: " << std::endl;
+	std::cout << "Country: ";
 	std::cin >> country;
-	std::cout << "Enter a patient gender (M, F, O): " << std::endl;
+	std::cout << "Gender (M, F, O): ";
 	std::cin >> gender;
 
 	Patient *myPatient = new Patient(id, name, checkin, checkout, status, age, country, gender);

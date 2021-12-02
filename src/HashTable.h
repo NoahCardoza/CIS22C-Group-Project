@@ -175,13 +175,17 @@ int HashTable<T>::getLengthOfLongest() const
 template <class T>
 void HashTable<T>::displayStatistics()
 {
-    std::cout << "~*-----------Statistics-----------*~" << std::endl;
-    std::cout << "Load factor: " << getLoadFactor() << "%" << std::endl;
-    std::cout << "Total collision count: " << getCollisionCount() << std::endl;
-    std::cout << "Length of the longest linked list: " << getLengthOfLongest() << std::endl;
-    std::cout << "Number of linked lists: " << count << std::endl;
-    std::cout << "Size of hash table: " << hashSize << std::endl;
-    std::cout << "----------------------------------" << std::endl;
+    std::cout << "┌────────-== Statistics ==-─────────┬──────────┐" << std::endl;
+    std::cout << "│ Load factor                       │ " << std::left << std::setprecision(4) << std::setw(5) << getLoadFactor() << "%   │" << std::endl;
+    std::cout << "├───────────────────────────────────┼──────────┤" << std::endl;
+    std::cout << "│ Total collision count             │ " << std::left << std::setw(8) << getCollisionCount() << " │" << std::endl;
+    std::cout << "├───────────────────────────────────┼──────────┤" << std::endl;
+    std::cout << "│ Length of the longest linked list │ " << std::left << std::setw(8) << getLengthOfLongest() << " │" << std::endl;
+    std::cout << "├───────────────────────────────────┼──────────┤" << std::endl;
+    std::cout << "│ Number of linked lists            │ " << std::left << std::setw(8) << count << " │" << std::endl;
+    std::cout << "├───────────────────────────────────┼──────────┤" << std::endl;
+    std::cout << "│ Size of hash table                │ " << std::left << std::setw(8) << hashSize << " │" << std::endl;
+    std::cout << "└───────────────────────────────────┴──────────┘" << std::endl;
 }
 
 /*~*~*~*

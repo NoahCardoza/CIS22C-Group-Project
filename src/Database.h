@@ -52,6 +52,7 @@ public:
   bool isOpen() { return opened; };
   int size() { return records.size(); };
   bool open(std::string filename);
+  bool create();
   bool close();
   bool save(std::string filename);
   bool primarySearch(T *search, T **result);
@@ -136,6 +137,22 @@ bool Database<T>::open(std::string filename)
     bst->insert(record);
     hashmap->insert(record);
   }
+
+  opened = true;
+
+  return true;
+}
+
+template <class T>
+bool Database<T>::create()
+{
+  if (opened)
+  {
+    return false;
+  }
+
+  bst = new BinarySearchTree<T *>();
+  hashmap = new HashTable<T>(HashTable<T>::calculateHashSize(records.size()));
 
   opened = true;
 
@@ -250,7 +267,7 @@ void Database<T>::displayData(void visit(T *))
 template <class T>
 void Database<T>::displayStatistics()
 {
-	hashmap->displayStatistics();
+  hashmap->displayStatistics();
 }
 
 template <class T>
@@ -258,6 +275,5 @@ void Database<T>::displayDataIndented(void visit(T *, int))
 {
   bst->printTree(visit);
 }
-
 
 #endif
