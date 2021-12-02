@@ -21,6 +21,51 @@ class IOManager
 {
 public:
 	/**
+	 * loads data from the save file
+	 */
+	bool loadFromFile(std::string);
+
+	/**
+	 * starts the main loop which displays the menu and collects the users input,
+	 * then calls the appropriate function to handle the rest
+	 */
+	void startMainLoop();
+
+	/**
+	* creates a new IO manager object with the hashtable DB and the BST DB
+	*/
+	IOManager();
+
+private:
+	/**
+	 * class interface to manipulate / display the data
+	 */
+	PatientDatabase database;
+
+	/**
+	 * stack used for the undoDelete() method.
+	 * whenever a patient is deleted, it will be pushed onto this stack.
+	 * Whenever the user saves everything to a file, this stack gets refreshed.
+	 */
+	std::stack<Patient *> *deletedStack;
+
+	/**
+	 * deletes deletedStack and frees the memory of all of the Patients in deletedStack
+	 * also creates a new Stack
+	 */
+	void deleteStack();
+
+	/**
+	 * saves data to the save file
+	 */
+	void saveToFile();
+
+	/**
+	 * loads data from specified file from user
+	 */
+	void loadFromUserInput();
+
+	/**
 	 * print out a menue to the user
 	 */
 	void printMenue();
@@ -81,44 +126,23 @@ public:
 	void displayData();
 
 	/**
-	 * starts the main loop which displays the menu and collects the users input,
-	 * then calls the appropriate function to handle the rest
+	 * prints the project information and credits
 	 */
-	void startMainLoop();
-
-	/**
-	 * saves data to the save file
-	 */
-	void saveToFile();
-
-	/**
-	 * loads data from the save file
-	 */
-	bool loadFromFile(std::string);
-
-	/**
-	 * loads data from specified file from user
-	 */
-	void loadFromUserInput();
-
-	/**
-	* creates a new IO manager object with the hashtable DB and the BST DB
-	*/
-	IOManager();
-
-private:
-	/**
-	 * class interface to manipulate / display the data
-	 */
-	PatientDatabase database;
-
-	/**
-	 * stack used for the undoDelete() method.
-	 * whenever a patient is deleted, it will be pushed onto this stack.
-	 * Whenever the user saves everything to a file, this stack gets refreshed.
-	 */
-	std::stack<Patient *> *deletedStack;
+	void printProjectInfo();
 };
+
+void IOManager::deleteStack()
+{
+	while (!deletedStack->empty())
+	{
+		Patient *p = deletedStack->top();
+		deletedStack->pop();
+		delete p;
+	}
+
+	delete deletedStack;
+	deletedStack = new std::stack<Patient *>();
+}
 
 IOManager::IOManager()
 {
@@ -128,6 +152,8 @@ IOManager::IOManager()
 void IOManager::startMainLoop()
 {
 	std::string studentOption;
+
+	printProjectInfo();
 
 	if (!database.isOpen())
 	{
@@ -185,6 +211,10 @@ void IOManager::startMainLoop()
 		else if (studentOption == "h" || studentOption == "?" || studentOption == "help")
 		{
 			printMenue();
+		}
+		else if(studentOption == "c" || studentOption == "credits")
+		{
+			printProjectInfo();
 		}
 		else if (studentOption == "e" || studentOption == "q")
 		{
@@ -273,7 +303,7 @@ void IOManager::saveToFile()
 	if (database.save(fileName))
 	{
 		std::cout << "Successfully saved to file" << std::endl;
-		delete deletedStack;
+		deleteStack();
 	}
 	else
 	{
@@ -300,7 +330,7 @@ void IOManager::loadFromUserInput()
 	if (loadFromFile(fileName))
 	{
 		std::cout << "Successfully loaded from file" << std::endl;
-		delete deletedStack;
+		deleteStack();
 	}
 	else
 	{
@@ -453,4 +483,26 @@ void IOManager::undoDelete()
 	{
 		std::cout << "Error undeleting patient from database!" << std::endl;
 	}
+}
+
+void IOManager::printProjectInfo()
+{
+	cout << "GENERAL INFORMATION" << endl;
+	cout << "====================" << endl;
+	cout << "This program is a database to hold covid-19 patients information / status." << endl;
+	cout << "It uses a Binary Search Tree and a Hashtable to store the data." << endl;
+	cout << "The program is able to add, delete, search, and print the data." << endl;
+	cout << "The program is able to save and load the data from a file." << endl;
+
+	cout << endl;
+
+	cout << "CREDITS" << endl;
+	cout << "=======" << endl;
+	cout << "This program was created by: " << endl;
+	cout << "Noah Cardoza - Team Leader, Worked on Team Coordination (Unit 1) and File I/O (Unit 5)" << endl;
+	cout << "Omar Hafud - Worked on Binary Search Tree (Unit 2)" << endl;
+	cout << "Sarina Karki - Worked on Hashtable (Unit 3)" << endl;
+	cout << "Aryan Garg - Worked on Screen I/O (Unit 4)" << endl;
+
+	cout << endl;
 }
