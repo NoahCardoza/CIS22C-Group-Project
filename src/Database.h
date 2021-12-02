@@ -45,12 +45,11 @@ private:
   bool opened = false;
   BinarySearchTree<T *> *bst = nullptr;
   HashTable<T> *hashmap = nullptr;
-  vector<T *> records;
   virtual std::string getHeader() = 0;
 
 public:
   bool isOpen() { return opened; };
-  int size() { return records.size(); };
+  int size() { return bst && bst->getCount() || 0; };
   bool open(std::string filename);
   bool create();
   bool close();
@@ -62,6 +61,10 @@ public:
   void displayData(void visit(T *));
   void displayStatistics();
   void displayDataIndented(void visit(T *, int));
+  static void free(T *record)
+  {
+    delete record;
+  };
 
   /**
    * Empties the vector holding the
@@ -73,13 +76,7 @@ public:
     T *record;
     if (opened)
     {
-      while (!records.empty())
-      {
-        record = records.back();
-        records.pop_back();
-        delete record;
-      }
-
+      bst->inOrder(free);
       delete hashmap;
       delete bst;
     }
@@ -97,6 +94,7 @@ public:
 template <class T>
 bool Database<T>::open(std::string filename)
 {
+  vector<T *> records;
   if (opened)
   {
     // you can't open a new database file
@@ -152,7 +150,7 @@ bool Database<T>::create()
   }
 
   bst = new BinarySearchTree<T *>();
-  hashmap = new HashTable<T>(HashTable<T>::calculateHashSize(records.size()));
+  hashmap = new HashTable<T>;
 
   opened = true;
 
@@ -177,12 +175,7 @@ bool Database<T>::close()
     return false;
   }
 
-  for (auto record : records)
-  {
-    delete record;
-  }
-
-  records.clear();
+  bst->inOrder(free);
 
   delete bst;
   delete hashmap;
@@ -237,7 +230,6 @@ bool Database<T>::insert(T *item)
 {
   if (hashmap->insert(item) && bst->insert(item))
   {
-    records.push_back(item);
     return true;
   }
 

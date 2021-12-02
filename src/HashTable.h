@@ -24,7 +24,7 @@ private:
     int hash(const T *key);
 
 public:
-    HashTable(int n)
+    HashTable(int n = 11)
     {
         count = 0;
         hashSize = n;
