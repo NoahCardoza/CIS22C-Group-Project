@@ -152,7 +152,7 @@ void IOManager::startMainLoop()
 
 	if (!database.isOpen())
 	{
-		std::cout << "No databse has been selected." << std::endl;
+		std::cout << "No database has been selected." << std::endl;
 		database.create();
 	}
 

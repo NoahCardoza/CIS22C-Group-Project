@@ -81,11 +81,13 @@ void BinaryTree<T>::_inorder(void visit(T), BinaryNode<T> *nodePtr) const
 template <class T>
 void BinaryTree<T>::_printTree(void visit(T, int), BinaryNode<T> *nodePtr, int level) const
 {
-	/* Write your code here */
 	if (nodePtr) // != nullptr  // added by Omar
 	{
-		T item = nodePtr->getItem();
-		visit(item, level);
+		for (T item : nodePtr->getItems())
+		{
+			visit(item, level);
+		}
+
 		level++;
 		_printTree(visit, nodePtr->getRightPtr(), level);
 		_printTree(visit, nodePtr->getLeftPtr(), level);
