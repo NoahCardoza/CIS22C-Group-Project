@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <vector>
+#include <iomanip>
 #include "LinkedList.h"
 
 template <class T>
@@ -145,7 +146,7 @@ bool HashTable<T>::remove(const T *key, T **itemOut)
 }
 
 /*~*~*~*
-   getLengthOfLongest traverses the hash table to find the longest linked list 
+   getLengthOfLongest traverses the hash table to find the longest linked list
    and return the length of the longest linked list.
 *~**/
 template <class T>
