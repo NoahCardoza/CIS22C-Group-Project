@@ -73,7 +73,6 @@ public:
    */
   ~Database(void)
   {
-    T *record;
     if (opened)
     {
       bst->inOrder(free);

@@ -161,6 +161,7 @@ void IOManager::startMainLoop()
 	while (true)
 	{
 		std::cout << "Enter an option (h for help) > ";
+		studentOption = "";
 		std::cin >> studentOption;
 
 		if (studentOption == "i")
@@ -415,21 +416,61 @@ void IOManager::createData()
 	}
 
 	std::cout << "Name: ";
-	std::cin.ignore();
+	// std::cin.ignore();
+	// std::cin >> name;
 	std::getline(std::cin, name);
 
 	std::cout << "Checkin time: ";
 	std::cin >> checkin;
+
+	if(!checkin)
+	{
+		std::cout << "Error: Invalid Checkin" << std::endl;
+		// std::cin.ignore(INT8_MAX);
+		return;
+	}
+
 	std::cout << "Checkout time: ";
 	std::cin >> checkout;
+
+	if(!checkout)
+	{
+		std::cout << "Error: Invalid Checkout" << std::endl;
+		// std::cin.ignore(INT8_MAX);
+		return;
+	}
+
 	std::cout << "Status (D, R (recovered), S (sick)): ";
 	std::cin >> status;
+
+	if(status != 'D' || status != 'R' || status != 'S')
+	{
+		std::cout << "Error: Invalid Status" << std::endl;
+		// std::cin.ignore(INT8_MAX);
+		return;
+	}
+
 	std::cout << "Age: ";
 	std::cin >> age;
+
+	if(!age)
+	{
+		std::cout << "Error: Invalid Age" << std::endl;
+		// std::cin.ignore(INT8_MAX);
+		return;
+	}
+
 	std::cout << "Country: ";
 	std::cin >> country;
 	std::cout << "Gender (M, F, O): ";
 	std::cin >> gender;
+
+	if(gender != 'M' || gender != 'F' || gender != 'O')
+	{
+		std::cout << "Error: Invalid Gender" << std::endl;
+		// std::cin.ignore(INT8_MAX);
+		return;
+	}
 
 	Patient *myPatient = new Patient(id, name, checkin, checkout, status, age, country, gender);
 	if (database.insert(myPatient))
