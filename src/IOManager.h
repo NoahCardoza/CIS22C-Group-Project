@@ -416,9 +416,17 @@ void IOManager::createData()
 	}
 
 	std::cout << "Name: ";
-	// std::cin.ignore();
+	std::cin.ignore();
 	// std::cin >> name;
 	std::getline(std::cin, name);
+
+	if(name.length() == 0)
+	{
+		std::cout << "Error: Name cannot be empty!" << std::endl;
+		cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		return;
+	}
 
 	std::cout << "Checkin time: ";
 	std::cin >> checkin;
@@ -426,7 +434,8 @@ void IOManager::createData()
 	if(!checkin)
 	{
 		std::cout << "Error: Invalid Checkin" << std::endl;
-		// std::cin.ignore(INT8_MAX);
+		cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		return;
 	}
 
@@ -436,7 +445,8 @@ void IOManager::createData()
 	if(!checkout)
 	{
 		std::cout << "Error: Invalid Checkout" << std::endl;
-		// std::cin.ignore(INT8_MAX);
+		cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		return;
 	}
 
@@ -446,7 +456,8 @@ void IOManager::createData()
 	if(status != 'D' || status != 'R' || status != 'S')
 	{
 		std::cout << "Error: Invalid Status" << std::endl;
-		// std::cin.ignore(INT8_MAX);
+		cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		return;
 	}
 
@@ -456,7 +467,8 @@ void IOManager::createData()
 	if(!age)
 	{
 		std::cout << "Error: Invalid Age" << std::endl;
-		// std::cin.ignore(INT8_MAX);
+		cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		return;
 	}
 
@@ -468,7 +480,8 @@ void IOManager::createData()
 	if(gender != 'M' || gender != 'F' || gender != 'O')
 	{
 		std::cout << "Error: Invalid Gender" << std::endl;
-		// std::cin.ignore(INT8_MAX);
+		cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		return;
 	}
 
