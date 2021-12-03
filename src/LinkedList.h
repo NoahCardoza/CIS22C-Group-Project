@@ -62,8 +62,8 @@ template <class T>
 void LinkedList<T>::insertNode(T *dataIn)
 {
 	HashNode<T *> *newNode; // A new node
-	HashNode<T *> *pCur;    //To traverse the list
-	HashNode<T *> *pPre;    // The previous node
+	HashNode<T *> *pCur;		//To traverse the list
+	HashNode<T *> *pPre;		// The previous node
 
 	// Allocate a new node and store the pointer to object there
 	newNode = new HashNode<T *>;
@@ -85,7 +85,7 @@ void LinkedList<T>::insertNode(T *dataIn)
 	{
 		newNode->setNext(pCur);
 	}
-	
+
 	// Update the counter
 	length++;
 }
@@ -106,25 +106,25 @@ bool LinkedList<T>::deleteNode(const T *target, T **itemOut)
 	pPre = head;
 
 	//Find node containing the target: Skip all nodes whose ID is less than the target
-	while (pCur && *pCur->getItem() < *target) 
+	while (pCur && *pCur->getItem() < *target)
 	{
-		pPre = Pcur;
+		pPre = pCur;
 		pCur = pCur->getNext();
 	}
-	
+
 	//If found, delete the node
-		if (pCur && *pCur->getItem() == *target)
-		{
-			pPre->setNext(pCur->getNext());
+	if (pCur && *pCur->getItem() == *target)
+	{
+		pPre->setNext(pCur->getNext());
 
-			*itemOut = pCur->getItem();
+		*itemOut = pCur->getItem();
 
-			delete pCur;
+		delete pCur;
 
-			length--;
+		length--;
 
-			return true;
-		}
+		return true;
+	}
 
 	return false;
 }
@@ -164,17 +164,17 @@ bool LinkedList<T>::searchList(const T *target, T **dataOut) const
 	pCur = head->getNext();
 
 	// Find location: skip all nodes whose name is less than target's name
-	while (pCur && *pCur->getItem() < *target) 
+	while (pCur && *pCur->getItem() < *target)
 	{
 		pCur = pCur->getNext();
 	}
 
 	//If found, copy data to the output parameter
-		if (pCur && (*pCur->getItem()) == (*target))
-		{
-			*dataOut = pCur->getItem();
-			return true;
-		}
+	if (pCur && (*pCur->getItem()) == (*target))
+	{
+		*dataOut = pCur->getItem();
+		return true;
+	}
 
 	return false;
 }
