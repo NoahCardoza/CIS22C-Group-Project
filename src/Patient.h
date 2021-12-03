@@ -1,3 +1,15 @@
+/**
+ * @author Noah Cardoza
+ * @file Patient.h
+ * Section: 5
+ * 
+ * This file contains the dataclass that manages each patient
+ * inserted into the database. It holds all the indavidule 
+ * information as well as some helpful methods which allow
+ * the other ADT's to use it. Theoretically, fields could be
+ * added or deleted and it should work the same.
+ */
+
 #ifndef PATIENT_H
 #define PATIENT_H
 
