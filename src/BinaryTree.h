@@ -1,6 +1,7 @@
 #pragma once
 #pragma once
-// Binary tree abstract base class
+// Binary tree abstract base class and provide some functions to 
+// BinarySearchTree().
 
 #ifndef _BINARY_TREE
 #define _BINARY_TREE
