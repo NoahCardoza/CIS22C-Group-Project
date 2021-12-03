@@ -1,5 +1,8 @@
 #pragma once
-// Binary Search Tree ADT
+// Binary Search Tree ADT that creates a tree of pointers to data base object of pateints. 
+// it manipulates the objects by either inserting objects, removing objects, and searching for
+// an objects.
+// BST inherits Binary Tree.
 
 #ifndef _BINARY_SEARCH_TREE
 #define _BINARY_SEARCH_TREE
@@ -10,13 +13,14 @@ template <class T>
 class BinarySearchTree : public BinaryTree<T>
 {
 public:
-	bool insert(const T &item);																				// insert a node at the correct location
-	T remove(const T target);																					// remove a node if found
-	bool search(const T &target, std::vector<T> *returnedItem) const; // find a target node
+    
+	bool insert(const T &item); // wrapper function to insert new nodes. True if inserted, false if not.																				// insert a node at the correct location
+	T remove(const T target);   // wrapper function to remove a node. Return removed node oif found.																				// remove a node if found
+	bool search(const T &target, std::vector<T> *returnedItem) const; // find a target node. Treu if found, false if not.
 private:
-	BinaryNode<T> *_insert(BinaryNode<T> *nodePtr, BinaryNode<T> *newNode); // internal insert node: insert newNode in nodePtr subtree
-	BinaryNode<T> *_remove(BinaryNode<T> *root, const T target, T *deleted, bool force);
-	bool _search(BinaryNode<T> *treePtr, const T target, std::vector<T> *returnedItem) const; // search for target node
+	BinaryNode<T> *_insert(BinaryNode<T> *nodePtr, BinaryNode<T> *newNode); // internal insert node: insert newNode in nodePtr subtree.
+	BinaryNode<T> *_remove(BinaryNode<T> *root, const T target, T *deleted, bool force); // internal remove found node and returns a removed node.
+	bool _search(BinaryNode<T> *treePtr, const T target, std::vector<T> *returnedItem) const; // internal search for target node and returns true if found nodes.
 };
 
 ///////////////////////// public function definitions ///////////////////////////
@@ -38,10 +42,11 @@ bool BinarySearchTree<T>::insert(const T &newEntry)
 	return true;
 }
 
-//Wrapper for _search
-// - it calls the private _search function that returns a Node pointer or nullptr
-// - if found, it copies data from that node and sends it back to the caller
-//   via the output parameter, and returns true, otherwise it returns false.
+// - Wrapper function.
+// - it calls the private _search function that returns bool. 
+// - if found a node or a vector of duplicate node pointers or nullptr.
+// - if found, it refrences data from that node and sends it back to the caller.
+// - or uses a vector of duplicate found nodes.
 template <class T>
 bool BinarySearchTree<T>::search(const T &anEntry, std::vector<T> *returnedItem) const
 {
@@ -50,7 +55,9 @@ bool BinarySearchTree<T>::search(const T &anEntry, std::vector<T> *returnedItem)
 
 //////////////////////////// private functions ////////////////////////////////////////////
 
-//Implementation of the insert operation
+// - Implementation of the private insert operation.
+// - it insert a new node into the BST in inorder and return a pointer
+// - to inserted node.
 template <class T>
 BinaryNode<T> *BinarySearchTree<T>::_insert(BinaryNode<T> *node, BinaryNode<T> *newNode)
 {
@@ -75,9 +82,9 @@ BinaryNode<T> *BinarySearchTree<T>::_insert(BinaryNode<T> *node, BinaryNode<T> *
 	return node;
 }
 
-//Implementation for the search operation
+// - Implementation for the search operation
 // - return nullptr if target not found, otherwise
-// - returns a pointer to the node that matched the target
+// - returns a true. It uses vector of pointers if duplicate nodes foind.
 template <class T>
 bool BinarySearchTree<T>::_search(BinaryNode<T> *nodePtr, const T target, std::vector<T> *returnedItem) const
 {
@@ -103,9 +110,9 @@ bool BinarySearchTree<T>::_search(BinaryNode<T> *nodePtr, const T target, std::v
 	return false;
 }
 
-//-Implementation for the remove operation
-// - return true if target is found and deleted, otherwise
-// - returns false if the node is not found
+// - Implementation for the remove operation
+// - wrapper function calls private function _remove(). it returns
+// - removed node true if target is found and deleted.
 template <class T>
 T BinarySearchTree<T>::remove(const T target)
 {
@@ -115,6 +122,12 @@ T BinarySearchTree<T>::remove(const T target)
 
 	return deleted;
 }
+
+
+
+// - private remove function.
+// - it returns removed node if found. it replaces the mostleft node with 
+// - the removed node.
 
 template <class T>
 BinaryNode<T> *BinarySearchTree<T>::_remove(BinaryNode<T> *root, const T key, T *deleted, bool force)
