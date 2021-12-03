@@ -1,20 +1,24 @@
-//
-//  LinkedList.h
-//  CIS_22C_PROJECT
-//
-//  Created by Sarina Karki on 11/6/21.
-//
+/*
+*
+  Header file for LinkedList class
+  Written by Sarina Karki
+  IDE: Xcode
+
+  Linked List is used as the collision resolution method. 
+  In the case of collision, the new hash node is inserted into the linked list in sorted order
+  *
+  */
 
 #ifndef LinkedList_h
 #define LinkedList_h
 
 #include "HashNode.h"
 
-/**
+/***************************************************
  * An interface used to iterate the linked list. It used a callback method
  * so information can be stored in the instance (to be accesed later in the
  * callback method) via the constructor of the subclassed instance.
- */
+ **************************************************/
 template <class T>
 class LinkedListIterator
 {
@@ -58,13 +62,30 @@ template <class T>
 void LinkedList<T>::insertNode(T *dataIn)
 {
 	HashNode<T *> *newNode; // A new node
+	HashNode<T *> *pCur;    //To traverse the list
+	HashNode<T *> *pPre;    // The previous node
 
 	// Allocate a new node and store the pointer to object there
 	newNode = new HashNode<T *>;
 	newNode->setItem(dataIn);
-	newNode->setNext(head->getNext());
-	head->setNext(newNode);
 
+	//Initialize pointers
+	pPre = head;
+	pCur = head->getNext();
+
+	//Find location: skip all nodes whose id is less than dataIn's id
+	while (pCur && *newNode->getItem() > *pCur->getItem())
+	{
+		pPre = pCur;
+		pCur = pCur->getNext();
+	}
+
+	pPre->setNext(newNode);
+	if (pCur)
+	{
+		newNode->setNext(pCur);
+	}
+	
 	// Update the counter
 	length++;
 }
@@ -85,9 +106,14 @@ bool LinkedList<T>::deleteNode(const T *target, T **itemOut)
 	pPre = head;
 
 	//Find node containing the target: Skip all nodes whose ID is less than the target
-	while (pCur)
+	while (pCur && *pCur->getItem() < *target) 
 	{
-		if (*pCur->getItem() == *target)
+		pPre = Pcur;
+		pCur = pCur->getNext();
+	}
+	
+	//If found, delete the node
+		if (pCur && *pCur->getItem() == *target)
 		{
 			pPre->setNext(pCur->getNext());
 
@@ -99,10 +125,6 @@ bool LinkedList<T>::deleteNode(const T *target, T **itemOut)
 
 			return true;
 		}
-
-		pPre = pCur;
-		pCur = pCur->getNext();
-	}
 
 	return false;
 }
@@ -142,15 +164,17 @@ bool LinkedList<T>::searchList(const T *target, T **dataOut) const
 	pCur = head->getNext();
 
 	// Find location: skip all nodes whose name is less than target's name
-	while (pCur)
+	while (pCur && *pCur->getItem() < *target) 
 	{
-		if ((*pCur->getItem()) == (*target))
+		pCur = pCur->getNext();
+	}
+
+	//If found, copy data to the output parameter
+		if (pCur && (*pCur->getItem()) == (*target))
 		{
 			*dataOut = pCur->getItem();
 			return true;
 		}
-		pCur = pCur->getNext();
-	}
 
 	return false;
 }

@@ -1,9 +1,12 @@
-//
-//  HashTable.h
-//  CIS_22C_PROJECT
-//
-//  Created by Sarina Karki on 11/6/21.
-//
+/*
+*
+  This is a header file for the HashTable class.
+  Written by Sarina Karki
+  IDE: Xcode
+  HashTable as an ADT helps to create an HashArray of linked list type.
+  It is used to insert, search and delete the object through the primary key.
+* 
+*/
 
 #ifndef HashTable_h
 #define HashTable_h
@@ -88,10 +91,10 @@ bool HashTable<T>::insert(T *itemIn)
     {
         return false;
     }
-    else
-    {
+    else{
         collisionCount++;
     }
+
 
     home->insertNode(itemIn);
 
@@ -112,8 +115,7 @@ bool HashTable<T>::insert(T *itemIn)
 template <class T>
 bool HashTable<T>::search(const T *query, T **result)
 {
-    return hashAry[hash(query)]
-        .searchList(query, result);
+    return hashAry[hash(query)].searchList(query, result);
 }
 
 /*~*~*~*
