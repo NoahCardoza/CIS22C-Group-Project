@@ -17,9 +17,6 @@ using namespace std;
 
 using std::string;
 
-// TODO: figure out how to use interfaces and inherit
-// from it for Patient class
-
 template <class T>
 class HashMapSaveToFileIter : public LinkedListIterator<T>
 {

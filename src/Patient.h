@@ -61,7 +61,6 @@ public:
 
   bool fromStream(std::ifstream *in);
   void toStream(std::ostream *out);
-  void print(void) const;
 
   // setters
   void setId(std::string id) { this->id = id; }

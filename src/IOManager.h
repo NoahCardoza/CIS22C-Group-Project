@@ -190,11 +190,13 @@ void IOManager::startMainLoop()
 		}
 		else if (studentOption == "li")
 		{
-			database.displayDataIndented(visitPatient); // TODO: include in call stack
+			printTableDivider();
+			database.displayDataIndented(visitPatient);
+			printTableDivider();
 		}
 		else if (studentOption == "t")
 		{
-			database.displayStatistics(); // TODO: include in call stack
+			database.displayStatistics();
 		}
 		else if (studentOption == "s")
 		{
@@ -420,55 +422,55 @@ void IOManager::createData()
 	// std::cin >> name;
 	std::getline(std::cin, name);
 
-	if(name.length() == 0)
+	if (name.length() == 0)
 	{
 		std::cout << "Error: Name cannot be empty!" << std::endl;
 		cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		return;
 	}
 
 	std::cout << "Checkin time: ";
 	std::cin >> checkin;
 
-	if(!checkin)
+	if (checkin < 1546300800)
 	{
 		std::cout << "Error: Invalid Checkin" << std::endl;
 		cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		return;
 	}
 
 	std::cout << "Checkout time: ";
 	std::cin >> checkout;
 
-	if(!checkout)
+	if (checkout <= checkin)
 	{
 		std::cout << "Error: Invalid Checkout" << std::endl;
 		cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		return;
 	}
 
 	std::cout << "Status (D, R (recovered), S (sick)): ";
 	std::cin >> status;
 
-	if(status != 'D' || status != 'R' || status != 'S')
+	if (status != 'D' && status != 'R' && status != 'S')
 	{
 		std::cout << "Error: Invalid Status" << std::endl;
 		cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		return;
 	}
 
 	std::cout << "Age: ";
 	std::cin >> age;
 
-	if(!age)
+	if (age <= 0)
 	{
 		std::cout << "Error: Invalid Age" << std::endl;
 		cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		return;
 	}
 
@@ -477,11 +479,11 @@ void IOManager::createData()
 	std::cout << "Gender (M, F, O): ";
 	std::cin >> gender;
 
-	if(gender != 'M' || gender != 'F' || gender != 'O')
+	if (gender != 'M' && gender != 'F' && gender != 'O')
 	{
 		std::cout << "Error: Invalid Gender" << std::endl;
 		cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		return;
 	}
 

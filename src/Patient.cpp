@@ -39,23 +39,6 @@ void Patient::toStream(ostream *out)
 }
 
 /**
- * Print out all the properties of the
- * class.
- *
- * TODO: remove in final version.
- */
-void Patient::print(void) const
-{
-  cout << "ID: " << id << endl;
-  cout << "Name: " << name << endl;
-  cout << "Check In: " << checkin << endl;
-  cout << "Check Out: " << checkout << endl;
-  cout << "Age: " << age << endl;
-  cout << "Country: " << country << endl;
-  cout << "Gender: " << gender << endl;
-}
-
-/**
  * Overloaded Operators
  */
 
