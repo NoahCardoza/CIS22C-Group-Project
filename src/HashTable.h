@@ -83,14 +83,15 @@ bool HashTable<T>::insert(T *itemIn)
     if (!home->getLength())
     {
         count++;
-        collisionCount--;
     }
     else if (home->searchList(itemIn, &dummy))
     {
         return false;
     }
-
-    collisionCount++;
+    else
+    {
+        collisionCount++;
+    }
 
     home->insertNode(itemIn);
 
