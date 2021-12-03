@@ -1,6 +1,6 @@
 #pragma once
 #pragma once
-// Binary tree abstract base class and provide some functions to 
+// Binary tree abstract base class and provide some functions to
 // BinarySearchTree().
 
 #ifndef _BINARY_TREE
@@ -80,7 +80,7 @@ void BinaryTree<T>::_inorder(void visit(T), BinaryNode<T> *nodePtr) const
 	}
 }
 
-//Prints tree as an indented list
+// Prints tree as an indented list
 template <class T>
 void BinaryTree<T>::_printTree(void visit(T, int), BinaryNode<T> *nodePtr, int level) const
 {
@@ -92,8 +92,17 @@ void BinaryTree<T>::_printTree(void visit(T, int), BinaryNode<T> *nodePtr, int l
 		}
 
 		level++;
+		// keeps double nulls from being printed in the indented tree
+		if (!nodePtr->getRightPtr() && !nodePtr->getLeftPtr())
+		{
+			return;
+		}
 		_printTree(visit, nodePtr->getRightPtr(), level);
 		_printTree(visit, nodePtr->getLeftPtr(), level);
+	}
+	else
+	{
+		visit(nullptr, level);
 	}
 }
 

@@ -389,8 +389,15 @@ void IOManager::printTablePatient(Patient *p)
 
 void IOManager::visitPatient(Patient *p, int level)
 {
-	std::cout << std::setw(level * 4) << "";
-	std::cout << p->getId() << "  " << p->getName() << std::endl;
+	std::cout << std::setw((level - 1) * 4) << "";
+	if (p)
+	{
+		std::cout << p->getId() << "  " << p->getName() << std::endl;
+	}
+	else
+	{
+		std::cout << "null" << std::endl;
+	}
 }
 
 void IOManager::displayData()
