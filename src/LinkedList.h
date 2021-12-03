@@ -10,6 +10,11 @@
 
 #include "HashNode.h"
 
+/**
+ * An interface used to iterate the linked list. It used a callback method
+ * so information can be stored in the instance (to be accesed later in the
+ * callback method) via the constructor of the subclassed instance.
+ */
 template <class T>
 class LinkedListIterator
 {
