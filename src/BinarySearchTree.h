@@ -1,5 +1,5 @@
 #pragma once
-// Binary Search Tree ADT that creates a tree of pointers to data base object of pateints. 
+// Binary Search Tree ADT that creates a tree of pointers to data base object of pateints.
 // it manipulates the objects by either inserting objects, removing objects, and searching for
 // an objects.
 // BST inherits Binary Tree.
@@ -13,13 +13,12 @@ template <class T>
 class BinarySearchTree : public BinaryTree<T>
 {
 public:
-    
-	bool insert(const T &item); // wrapper function to insert new nodes. True if inserted, false if not.																				// insert a node at the correct location
-	T remove(const T target);   // wrapper function to remove a node. Return removed node oif found.																				// remove a node if found
+	bool insert(const T &item);																				// wrapper function to insert new nodes. True if inserted, false if not.																				// insert a node at the correct location
+	T remove(const T target);																					// wrapper function to remove a node. Return removed node oif found.																				// remove a node if found
 	bool search(const T &target, std::vector<T> *returnedItem) const; // find a target node. Treu if found, false if not.
 private:
-	BinaryNode<T> *_insert(BinaryNode<T> *nodePtr, BinaryNode<T> *newNode); // internal insert node: insert newNode in nodePtr subtree.
-	BinaryNode<T> *_remove(BinaryNode<T> *root, const T target, T *deleted, bool force); // internal remove found node and returns a removed node.
+	BinaryNode<T> *_insert(BinaryNode<T> *nodePtr, BinaryNode<T> *newNode);										// internal insert node: insert newNode in nodePtr subtree.
+	BinaryNode<T> *_remove(BinaryNode<T> *root, const T target, T *deleted, bool force);			// internal remove found node and returns a removed node.
 	bool _search(BinaryNode<T> *treePtr, const T target, std::vector<T> *returnedItem) const; // internal search for target node and returns true if found nodes.
 };
 
@@ -32,18 +31,19 @@ bool BinarySearchTree<T>::insert(const T &newEntry)
 	if (this->isEmpty())
 	{
 		this->rootPtr = newNodePtr;
-		this->count++;
 	}
 	else
 	{
 		this->rootPtr = _insert(this->rootPtr, newNodePtr);
 	}
 
+	this->count++;
+
 	return true;
 }
 
 // - Wrapper function.
-// - it calls the private _search function that returns bool. 
+// - it calls the private _search function that returns bool.
 // - if found a node or a vector of duplicate node pointers or nullptr.
 // - if found, it refrences data from that node and sends it back to the caller.
 // - or uses a vector of duplicate found nodes.
@@ -120,13 +120,16 @@ T BinarySearchTree<T>::remove(const T target)
 
 	this->rootPtr = _remove(this->rootPtr, target, &deleted, false);
 
+	if (deleted)
+	{
+		this->count--;
+	}
+
 	return deleted;
 }
 
-
-
 // - private remove function.
-// - it returns removed node if found. it replaces the mostleft node with 
+// - it returns removed node if found. it replaces the mostleft node with
 // - the removed node.
 
 template <class T>

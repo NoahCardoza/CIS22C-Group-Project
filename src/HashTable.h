@@ -91,10 +91,10 @@ bool HashTable<T>::insert(T *itemIn)
     {
         return false;
     }
-    else{
+    else
+    {
         collisionCount++;
     }
-
 
     home->insertNode(itemIn);
 

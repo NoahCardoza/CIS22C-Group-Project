@@ -74,7 +74,7 @@ void LinkedList<T>::insertNode(T *dataIn)
 	pCur = head->getNext();
 
 	//Find location: skip all nodes whose id is less than dataIn's id
-	while (pCur && *newNode->getItem() > *pCur->getItem())
+	while (pCur && newNode->getItem()->getId() > pCur->getItem()->getId())
 	{
 		pPre = pCur;
 		pCur = pCur->getNext();
@@ -106,7 +106,7 @@ bool LinkedList<T>::deleteNode(const T *target, T **itemOut)
 	pPre = head;
 
 	//Find node containing the target: Skip all nodes whose ID is less than the target
-	while (pCur && *pCur->getItem() < *target)
+	while (pCur && pCur->getItem()->getId() < target->getId())
 	{
 		pPre = pCur;
 		pCur = pCur->getNext();
@@ -164,7 +164,7 @@ bool LinkedList<T>::searchList(const T *target, T **dataOut) const
 	pCur = head->getNext();
 
 	// Find location: skip all nodes whose name is less than target's name
-	while (pCur && *pCur->getItem() < *target)
+	while (pCur && pCur->getItem()->getId() < target->getId())
 	{
 		pCur = pCur->getNext();
 	}
