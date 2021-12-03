@@ -1,3 +1,11 @@
+/**
+ * @author Noah Cardoza
+ * Section: 5
+ * 
+ * The Database.h file manages both the BinarySearchTree and HashTable.
+ * It abstracts the database related logic away from the screen/io logic.
+ */
+
 #ifndef DATABASE_H
 #define DATABASE_H
 
@@ -17,6 +25,12 @@ using namespace std;
 
 using std::string;
 
+/**
+ * @author Noah Cardoza
+ * 
+ * Used to iterate the HashTable and save
+ * the database to a file.
+ */
 template <class T>
 class HashMapSaveToFileIter : public LinkedListIterator<T>
 {
@@ -24,17 +38,37 @@ private:
   ofstream *stream;
 
 public:
+  /**
+   * @author Noah Cardoza
+   * 
+   * Stores an ofstream pointer so the 
+   * callback method can access it later.
+   */
   HashMapSaveToFileIter(ofstream *stream)
   {
     this->stream = stream;
   }
 
+  /**
+   * @author Noah Cardoza
+   * 
+   * Calls the toStream method on the
+   * patient instances passing in the
+   * stream that was stored in the 
+   * constructor
+   */
   void cb(T record)
   {
     record->toStream(stream);
   }
 };
 
+/**
+ * @author Noah Cardoza & Aryan Garg
+ * 
+ * Abstracts the database opperations
+ * away from the user interface.
+ */
 template <class T>
 class Database
 {
@@ -64,6 +98,8 @@ public:
   };
 
   /**
+   * @author Noah Cardoza
+   * 
    * Empties the vector holding the
    * pointers to the records in the
    * database and frees them
@@ -80,6 +116,8 @@ public:
 };
 
 /**
+ * @author Noah Cardoza
+ * 
  * Accept a string representing the path
  * to a CSV file that contains the
  * information needed to populate
@@ -137,6 +175,11 @@ bool Database<T>::open(std::string filename)
   return true;
 }
 
+/**
+ * @author Noah Cardoza
+ * 
+ * Create an epmty database.
+ */
 template <class T>
 bool Database<T>::create()
 {
@@ -154,6 +197,8 @@ bool Database<T>::create()
 }
 
 /**
+ * @author Noah Cardoza
+ * 
  * Close the database freeing all the
  * pointers ready to close the program
  * or open another file.
@@ -182,6 +227,8 @@ bool Database<T>::close()
 }
 
 /**
+ * @author Noah Cardoza
+ * 
  * Accept a string representing the path
  * for which the database in memory will
  * be saved to the filesystem.
@@ -209,18 +256,33 @@ bool Database<T>::save(std::string filename)
   return true;
 }
 
+/**
+ * @author Noah Cardoza
+ * 
+ * Wrapper for the HashTable search method.
+ */
 template <class T>
 bool Database<T>::primarySearch(T *search, T **result)
 {
   return hashmap->search(search, result);
 }
 
+/**
+ * @author Noah Cardoza
+ * 
+ * Wrapper for the BST search method.
+ */
 template <class T>
 bool Database<T>::secondarySearch(T *search, std::vector<T *> &ret)
 {
   return bst->search(search, &ret);
 }
 
+/**
+ * @author Noah Cardoza
+ * 
+ * Wrapper for the HashTable and BST insert methods.
+ */
 template <class T>
 bool Database<T>::insert(T *item)
 {
@@ -246,18 +308,33 @@ bool Database<T>::remove(T *query, T **result)
   return false;
 }
 
+/**
+ * @author Aryan Garg
+ * 
+ * Wrapper for the BST inOrder method.
+ */
 template <class T>
 void Database<T>::displayData(void visit(T *))
 {
   bst->inOrder(visit);
 }
 
+/**
+ * @author Aryan Garg
+ * 
+ * Wrapper for the HashTable displayStatistics method.
+ */
 template <class T>
 void Database<T>::displayStatistics()
 {
   hashmap->displayStatistics();
 }
 
+/**
+ * @author Aryan Garg
+ * 
+ * Wrapper for the BST printTree method.
+ */
 template <class T>
 void Database<T>::displayDataIndented(void visit(T *, int))
 {

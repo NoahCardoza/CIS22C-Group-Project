@@ -159,14 +159,14 @@ int HashTable<T>::getLengthOfLongest() const
     return max;
 }
 
-/*~*~*~*
-   displayStatistics() print out:
-    -load factor
-    -total collision count
-    -length of the longest linked list
-    -number of linked lists
-    -size of the hash table
-*~**/
+/**
+ * displayStatistics() print out:
+ *   -load factor
+ *   -total collision count
+ *   -length of the longest linked list
+ *   -number of linked lists
+ *   -size of the hash table 
+**/
 template <class T>
 void HashTable<T>::displayStatistics()
 {

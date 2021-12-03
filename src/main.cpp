@@ -1,5 +1,23 @@
+/**
+ * @author Noah Cardoza
+ * Section: 1
+ * 
+ * The main.cpp file starts the whole project. Here we collect any
+ * arguments sent to the program and either preload a database, or
+ * continue with an empty database.
+ * 
+ * We abstracts most of the screen related logic to the IOManager.h file.
+ */
+
 #include "IOManager.h"
 
+/**
+ * @author Noah Cardoza
+ * 
+ * Accepts one argument: a path to a database to open.
+ * 
+ * Passes the user interface handling to getIO::startMainLoop.
+ */
 int main(int argc, char *argv[])
 {
 	IOManager getIO = IOManager();

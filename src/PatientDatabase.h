@@ -1,3 +1,15 @@
+/**
+ * @author Noah Cardoza
+ * @file PatientDatabase.h
+ * Section: 5
+ * 
+ * I tried to make this project as modular as possible.
+ * The Database is an ADT for this reason. If the header
+ * of the CSV file should change, you must subclass it 
+ * differently and update the getHeader method which I did
+ * here.
+ */
+
 #ifndef PATIENT_DATABASE_H
 #define PATIENT_DATABASE_H
 
