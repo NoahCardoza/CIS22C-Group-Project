@@ -269,6 +269,7 @@ void IOManager::findDataWithPrimaryKey()
 	std::cout << "Patient found:" << std::endl;
 	printTableHeader();
 	printTablePatient(patient);
+	printTableDivider();
 }
 
 void IOManager::findDataWithSecondaryKey()
