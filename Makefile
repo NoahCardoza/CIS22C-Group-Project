@@ -1,5 +1,11 @@
 CFLAGS=-std=c++11 -Wall -Werror -Wextra
 
+all:
+	g++ src/Patient.cpp src/main.cpp  -std=c++11 -o database-cli
+
+run:
+	g++ src/Patient.cpp src/main.cpp  -std=c++11 -o database-cli && ./database-cli
+
 unit:
 	@cd tests/unit &&\
 	g++ -o BinarySearchTree.test BinarySearchTree.test.cpp ../../src/Patient.cpp $(CFLAGS) &&\
