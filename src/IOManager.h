@@ -12,6 +12,12 @@
 #include "Patient.h"
 #include "PatientDatabase.h"
 
+/**
+ * @author Aryan Garg and Noah Cardoza
+ *
+ * This class is responsible for the main structure of the program, and takes in the input from the user and handles it accordingly.
+ * To start the program, call the startMainLoop() method
+ */
 class IOManager
 {
 public:
