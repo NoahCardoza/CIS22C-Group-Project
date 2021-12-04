@@ -127,18 +127,20 @@ bool HashTable<T>::remove(const T *key, T **itemOut)
     int homeAddr = hash(key);
     bool success;
 
-    success = hashAry[homeAddr].deleteNode(key, itemOut);
-
-    if (hashAry[homeAddr].getLength() == 0)
+    if (hashAry[homeAddr].deleteNode(key, itemOut))
     {
-        count--;
-    }
-    else
-    {
-        collisionCount--;
+        if (hashAry[homeAddr].getLength() == 0)
+        {
+            count--;
+        }
+        else
+        {
+            collisionCount--;
+        }
+        return true;
     }
 
-    return success;
+    return false;
 }
 
 /*~*~*~*
