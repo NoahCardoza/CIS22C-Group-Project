@@ -520,18 +520,17 @@ void IOManager::deleteData()
 	std::cin >> id;
 
 	Patient patientKey = Patient(id, "");
-	Patient *itemOut;
+	Patient *itemOut = nullptr;
 
 	if (database.remove(&patientKey, &itemOut))
 	{
 		std::cout << "Successfully deleted patient from database!" << std::endl;
+		deletedStack->push(itemOut);
 	}
 	else
 	{
 		std::cout << "Error deleting patient from database!" << std::endl;
 	}
-
-	deletedStack->push(itemOut);
 }
 
 void IOManager::undoDelete()
