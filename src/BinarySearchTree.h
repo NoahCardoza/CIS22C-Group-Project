@@ -1,3 +1,5 @@
+
+
 #pragma once
 // Binary Search Tree ADT that creates a tree of pointers to data base object of pateints.
 // it manipulates the objects by either inserting objects, removing objects, and searching for

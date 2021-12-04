@@ -1,5 +1,12 @@
-#pragma once
+/**
+ * @author Omar Hafud
+ * 
+ * This class is used by the BinaryTree and BinarySearchTree subclass.
+ * It's a wrapper for all the items stored in the tree. It uses a vector internally
+ * to consolidate items of the same value.
+ */
 
+#pragma once
 #include <vector>
 
 #ifndef _BINARY_NODE

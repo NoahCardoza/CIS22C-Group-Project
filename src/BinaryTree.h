@@ -1,7 +1,11 @@
+/**
+ * @author Omar Hafud
+ * 
+ * This class describes the basic requirments for a tree structure.
+ * It is only used through the BinarySearchTree subclass.
+ */
+
 #pragma once
-#pragma once
-// Binary tree abstract base class and provide some functions to
-// BinarySearchTree().
 
 #ifndef _BINARY_TREE
 #define _BINARY_TREE
